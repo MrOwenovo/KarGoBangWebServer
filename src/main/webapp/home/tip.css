@@ -1,0 +1,109 @@
+#all{
+    display: flex;
+}
+body{
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    /*background-image: url(https://img2.baidu.com/it/u=2363669019,420455193&fm=26&fmt=auto);*/
+    background-size: cover;
+    background-position: center;
+
+    backdrop-filter: blur(6px);
+    box-shadow: 0 25px 25px rgba(0, 0, 0, 0.4);
+    border-top: 1px solid rgba(255, 255, 255, 0.6);
+    transition: 0.5s;
+    position: relative;
+    overflow: hidden;
+
+}
+
+/*:root{
+	--write:rgba(255, 255, 255, 0.2);
+}*/
+
+.cart{
+    width: 500px;
+    height: 600px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    backdrop-filter: blur(6px);
+    box-shadow: 0 25px 25px rgba(0, 0, 0, 0.4);
+    border-top: 1px solid rgba(255, 255, 255, 0.6);
+    transition: 0.5s;
+    position: relative;
+    overflow: hidden;
+}
+.cart:hover{
+    transform: scale(1.1);
+}
+
+.cart .info{
+    height: 240px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.cart .info #closeImg{
+     top: 30px;
+     left :440px;
+     position: absolute;
+     height: 100px;
+     /*border-radius: 10%;*/
+     border: 8px solid rgba(255, 255, 255, 0.2);
+     margin-right: 40px;
+ }
+.cart .info #ruleImg {
+    top: 190px;
+    left :60px;
+    position: absolute;
+    height: 100px;
+    /*border-radius: 10%;*/
+    border: 8px solid rgba(255, 255, 255, 0.2);
+    margin-right: 40px;
+}
+.cart .info .txt{
+    display: flex;
+    flex-direction: column;
+    line-height: 2;
+}
+.cart .info .txt span:nth-child(1){
+    font-size: 24px;
+    font-weight: bold;
+}
+.cart .info .txt span:nth-child(2){
+    font-size: 21px;
+    font-weight: bold;
+}
+.cart .info .content {
+    display: flex;
+    position: absolute;
+    top: 290px;
+    left: 70px;
+    flex-direction: column;
+    line-height: 2;
+}
+.cart .info .content span:nth-child(1){
+    font-size: 21px;
+    font-weight: bold;
+}
+.cart .b{
+    position: absolute;
+    bottom: 0;
+    height: 60px;
+    width: 100%;
+    background: #7b4def;
+
+}
+#close {
+    background-image: url(close.png);
+    position: absolute;
+    top: 30px;
+    left: 450px;
+
+
+}
