@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="GBK">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/static/login.css}">
+    <title>Document</title>
+</head>
+<body th:style="'background:url('+'../static/wallpaper.jpg'+') no-repeat;background-size: cover;background-attachment: fixed;'">
+<form action="doLogin" class="login" method="post">
+    <p>Login</p>
+    <input type="text" placeholder="用户名" name="username">
+    <input type="password" placeholder="密码" name="password">
+    <input type="submit" class="btn" value="登  录">
+<!--    <input type="text" th:name="${_csrf.getParameterName()}" th:value="${_csrf.token}" hidden>-->
+</form>
+    
+</body>
+</html>

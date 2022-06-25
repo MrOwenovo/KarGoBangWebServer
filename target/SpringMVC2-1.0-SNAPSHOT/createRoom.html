@@ -22,17 +22,14 @@
         function submitRoomNumber() {
             var number=$("#number").val()
             if (number.length>0&&number.length<=15){
-            console.log(number);
             $.post("submitRoomNumber", {  //使用post方法发送请求
                  //第二个参数是要传递的对象，会以表单数据的方式发送
                 "number":number
             }, function (data) {
-                if (data === "该房间已被创建!") {
-                    window.alert("该房间已被创建!")
+                if (data.length === 4) {
                 }else {
-                    console.log(data);
-                    document.write(data)
-                    document.close()
+                    document.write(data);
+                    document.close();
                 }
             })
             }else{
@@ -78,6 +75,7 @@
             <span>是否加密?</span>
         </label>
     </div>
+<!--    <input type="text" th:name="${_csrf.getParameterName()}" th:value="${_csrf.token}" hidden>-->
 </div>
 <!--<a href="/download" download="error.html">下载最新资源</a>-->
 <div class="square">
