@@ -8,7 +8,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.ComponentScans;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 
+import javax.annotation.Resource;
 import javax.sql.DataSource;
 
 
@@ -36,4 +39,5 @@ public class RootConfiguration {
         bean.setDataSource(dataSource);
         return bean;
     }
+
 }
