@@ -3,6 +3,7 @@ package Controller;
 import com.alibaba.fastjson.JSONObject;
 import dao.RoomAction;
 import entity.AuthUser;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -22,7 +23,6 @@ import java.security.Principal;
 
 @Controller
 @Slf4j
-@RequestMapping("/KarGoBang")
 public class RoomController {
 
     @Resource
@@ -98,6 +98,13 @@ public class RoomController {
         return "false";
     }
 
+    @SneakyThrows
+    @RequestMapping(value = "/preLogout",method = RequestMethod.GET)
+    public String preLogout() {  //退出登录
+        System.out.println("loginout");
+        Thread.sleep(3000);
+        return "login";
+    }
 
     //返回创建房间错误信息
     @RequestMapping(value = "/createRoomFiled", method = RequestMethod.POST)
@@ -145,6 +152,7 @@ public class RoomController {
                 if (principal instanceof Principal) {
                     response.addCookie(new Cookie("auth", ((Principal) principal).getName()));
                 }
+                roomAction.createRoomTable(roomNumber); //创建棋子表
                 return "RoomFirstPerson";
             } else {
                 return "addRoomPasswordError";

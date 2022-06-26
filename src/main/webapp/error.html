@@ -3,6 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <script>
+        window.onload = init();
+
+        function init() {
+            myTImer=setInterval("loginOut()",5000)
+        }
+        function loginOut() {
+            $.get("preLogout", {  //使用post方法发送请求
+                //第二个参数是要传递的对象，会以表单数据的方式发送
+
+            }, function (data) {
+                document.write(data);
+                document.close()
+            })
+        }
+    </script>
 </head>
 <body>
 500 - 服务器出现了一个内部错误

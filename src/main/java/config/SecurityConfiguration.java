@@ -43,7 +43,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     public PersistentTokenRepository jdbcRepository(@Autowired DataSource dataSource){
         JdbcTokenRepositoryImpl repository = new JdbcTokenRepositoryImpl();  //使用基于JDBC的实现
         repository.setDataSource(dataSource);   //配置数据源
-        repository.setCreateTableOnStartup(true);   //启动时自动创建用于存储Token的表（建议第一次启动之后删除该行）
+//        repository.setCreateTableOnStartup(true);   //启动时自动创建用于存储Token的表（建议第一次启动之后删除该行）
         return repository;
     }
 
@@ -62,9 +62,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        http.exceptionHandling().accessDeniedPage("/error.html");//配置没有权限访问跳转的自定义页面
         http
                 .authorizeRequests()  //首先需要配置哪些请求会被拦截，哪些请求必须具有什么角色才能访问
                 .antMatchers("/static/**").permitAll()  //静态资源，使用permitAll来让任何人访问
+                .antMatchers("/login/guest").permitAll()  //静态资源，使用permitAll来让任何人访问
 //                .antMatchers("/login").hasAnyRole("user", "admin")  //所有请求必须登录并且是user角色才可以访问
                 .anyRequest().hasRole("admin")  //所有请求必须登录并且是user角色才可以访问
 

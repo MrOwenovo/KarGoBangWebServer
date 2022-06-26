@@ -1,11 +1,9 @@
 package dao.impl;
 
 import dao.RoomAction;
-import dao.mapper.RoomMapper;
+import dao.mapper.RoomActionMapper;
 import entity.Room;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
-import org.springframework.web.context.annotation.RequestScope;
 
 import javax.annotation.Resource;
 import java.util.Timer;
@@ -15,11 +13,11 @@ import java.util.TimerTask;
 public class RoomActionImpl implements RoomAction {
 
     @Resource
-    RoomMapper roomMapper;
+    RoomActionMapper roomActionMapper;
 
     @Override
     public synchronized void addRoomNumber(String roomNumber, String password) {
-        roomMapper.createRoomNumber(roomNumber, "0", password);
+        roomActionMapper.createRoomNumber(roomNumber, "0", password);
         new Thread(){
             @Override
             public void run() {
@@ -37,16 +35,21 @@ public class RoomActionImpl implements RoomAction {
 
     @Override
     public synchronized void deleteRoomNumber(String roomNumber) {
-        roomMapper.deleteRoomNumber(roomNumber);
+        roomActionMapper.deleteRoomNumber(roomNumber);
     }
 
     @Override
     public synchronized Room getRoomNumber(String roomNumber) {
-        return roomMapper.getRoomNumber(roomNumber);
+        return roomActionMapper.getRoomNumber(roomNumber);
     }
 
     @Override
     public int updateIsReady(String roomNumber) {
-        return roomMapper.updateIsReady(1, roomNumber);
+        return roomActionMapper.updateIsReady(1, roomNumber);
+    }
+
+    @Override
+    public void createRoomTable(String roomNumber) {
+        roomActionMapper.createRoomTable("room"+roomNumber);  //创建表
     }
 }

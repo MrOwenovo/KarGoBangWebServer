@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
-@RequestMapping("/KarGoBang")
 public class GameController {
 
     @PreAuthorize("hasAnyRole('user','admin')")
@@ -25,6 +24,12 @@ public class GameController {
     public String selectModel() {
         return "selectModel";
     }
+
+    @RequestMapping(value = "/move",method = RequestMethod.POST)
+    public void whiteMove(int x,int y,int z,String type) {
+
+    }
+
 
 
 

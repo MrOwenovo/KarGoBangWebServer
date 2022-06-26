@@ -29,5 +29,11 @@ public interface RoomAction {
      * 修改房间是否加入成功
      */
     int updateIsReady(String roomNumber);
+
+    /**
+     * 创建记录下棋步数的数据库表，以room+房间号的形式
+     * @param roomNumber
+     */
+    void createRoomTable(String roomNumber);
 }
 

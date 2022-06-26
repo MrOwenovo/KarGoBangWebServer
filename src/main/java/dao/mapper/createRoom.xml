@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.mapper.RoomActionMapper">
+<!--  开启二级缓存  -->
+<!--  eviction:  LRU：最近最少使用：移除最长时间不被使用的对象
+                 FIFO：先进先出，按对象进入缓存的顺序来移除它们
+                 SOFT：软引用，基于垃圾回收器状态和软引用规则移除对象
+                 WEAK：弱引用，更积极地基于垃圾收集器状态和弱引用规则移除对象-->
+
+
+    <update id="createRoomTable" parameterType="string" statementType="STATEMENT">
+        CREATE TABLE  ${tableName} (
+                                       `index` int(100) NOT NULL,AUTO_INCREMENT PRIMARY KEY,
+                                       `poster` varchar(100) DEFAULT NULL,
+                                       `getter` varchar(100) DEFAULT NULL,
+                                       `locationX` int(11) NOT NULL,
+                                       `locationY` int(11) NOT NULL,
+                                       `type` varchar(100) DEFAULT NULL,
+                                       `locationZ` int(11) NOT NULL,
+        )
+    </update>
+
+
+</mapper>

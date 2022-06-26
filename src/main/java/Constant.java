@@ -1,4 +1,4 @@
-import BeansUtil.KarConfiguration;
+import config.RootConfiguration;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
@@ -12,6 +12,6 @@ public class Constant {
 
 
     //Spring上下文
-    public static ApplicationContext context = new AnnotationConfigApplicationContext(KarConfiguration.class);
+    public static ApplicationContext context = new AnnotationConfigApplicationContext(RootConfiguration.class);
 
 }

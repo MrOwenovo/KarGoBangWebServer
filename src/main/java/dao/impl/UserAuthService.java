@@ -10,6 +10,9 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 
+/**
+ * SpringSecurity登录用户信息
+ */
 @Service
 public class UserAuthService implements UserDetailsService {
 

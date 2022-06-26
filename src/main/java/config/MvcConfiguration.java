@@ -98,6 +98,19 @@ public class MvcConfiguration implements WebMvcConfigurer {
         return resolver;
     }
 
+    @Override
+    public void addCorsMappings(CorsRegistry corsRegistry){
+        /**
+         * 所有请求都允许跨域，使用这种配置就不需要
+         * 在interceptor中配置header了
+         */
+        corsRegistry.addMapping("/**")
+                .allowCredentials(true)
+                .allowedOrigins("http://localhost:8080")
+                .allowedMethods("POST", "GET", "PUT", "OPTIONS", "DELETE")
+                .allowedHeaders("*")
+                .maxAge(3600);
+    }
 
 
 }
