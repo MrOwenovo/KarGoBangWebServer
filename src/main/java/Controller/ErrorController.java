@@ -15,16 +15,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class ErrorController {
 
 //    @RequestMapping("/error")
-    @ExceptionHandler(Exception.class)
-    public String error(Exception e, Model model) {
-        e.printStackTrace();
-        model.addAttribute("e", e);
-        return "error";
-    }
+//    @ExceptionHandler(Exception.class)
+//    public String error(Exception e, Model model) {
+//        e.printStackTrace();
+//        model.addAttribute("e", e);
+//        return "error";
+//    }
 
     @ExceptionHandler({AccessDeniedException.class})
     public String handlerException(){
-        return "redirect:/error";
+        return "login";
     }
 
 
