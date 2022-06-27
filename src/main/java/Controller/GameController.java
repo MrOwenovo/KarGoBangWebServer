@@ -33,8 +33,8 @@ public class GameController {
 
     @RequestMapping(value = "/move", method = RequestMethod.POST,produces = {"application/json"})
     @ResponseBody
-    public Object Move() {
-        System.out.println("x: ");
+    public Object Move(@RequestBody String map) {
+        System.out.println("x: "+map);
         return JSON.parse("1");
     }
 
