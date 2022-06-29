@@ -19,6 +19,11 @@ public class MoveServiceImpl implements MoveService {
     }
 
     @Override
+    public void blackMove(String poster, String x, String y, String z) {
+        gameMotion.blackMove(poster,x,y,z); //移动白棋dao层方法
+    }
+
+    @Override
     public Move[] getMoves(String roomNumber) {
         return gameMotion.readMoves(roomNumber);
     }

@@ -19,7 +19,8 @@ public class GameMotionImpl implements GameMotion {
     }
 
     @Override
-    public void blackMove(int x, int y,int z) {
+    public void blackMove(String poster, String x, String y, String z) {
+        mapper.addMove(poster, x, y, "black", z);
 
     }
 

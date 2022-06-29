@@ -71,6 +71,59 @@ public class GameController {
 //        return JSON.parse("1");
     }
 
+    @SneakyThrows
+    @RequestMapping(value = "/blackMove", method = RequestMethod.POST,produces = {"application/json"})
+    @ResponseBody
+    public Object blackMove(@RequestBody Move move, HttpServletRequest request) {
+        log.info("黑棋走了："+move);
+        Cookie[] cookies = request.getCookies();
+        String roomNumber = null;
+        int movesAmount = 0;  //走的总步数
+        for (Cookie cookie : cookies) {
+            if (cookie.getName().equals("roomNumber")) {
+                roomNumber = cookie.getValue();
+                moveService.blackMove(cookie.getValue(),move.getX(),move.getY(),move.getZ());
+                Move[] moves = moveService.getMoves(roomNumber);//获取一遍走的步数
+                movesAmount = moves.length; //赋值
+            }
+        }
+        while (true) {
+            Thread.sleep(1000);
+            Move[] moves = moveService.getMoves(roomNumber);
+            if (moves.length > movesAmount) {
+                return moves[moves.length - 1];
+            }
+
+        }
+//        return JSON.parse("1");
+    }
+
+    @SneakyThrows
+    @RequestMapping(value = "/wait", method = RequestMethod.POST,produces = {"application/json"})
+    @ResponseBody
+    public Object wait(@RequestBody String none, HttpServletRequest request) {
+        log.info("黑棋在等待...：");
+        Cookie[] cookies = request.getCookies();
+        String roomNumber = null;
+        int movesAmount = 0;  //走的总步数
+        for (Cookie cookie : cookies) {
+            if (cookie.getName().equals("roomNumber")) {
+                roomNumber = cookie.getValue();
+                Move[] moves = moveService.getMoves(roomNumber);//获取一遍走的步数
+                movesAmount = moves.length; //赋值
+            }
+        }
+        while (true) {
+            Thread.sleep(1000);
+            Move[] moves = moveService.getMoves(roomNumber);
+            if (moves.length > movesAmount) {
+                return moves[moves.length - 1];
+            }
+
+        }
+//        return JSON.parse("1");
+    }
+
     @RequestMapping(value = "/pre",method = RequestMethod.POST)
     public void pre(HttpServletResponse response) {  //处理预检请求
         response.addHeader("Content-Type","text/html; charset=utf-8");

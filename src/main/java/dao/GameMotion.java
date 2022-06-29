@@ -20,7 +20,7 @@ public interface GameMotion {
      * @param y 棋盘y坐标
      * @param z 棋盘z坐标
      */
-    void blackMove(int x,int y,int z);
+    void blackMove(String poster,String x, String y, String z);
 
     /**
      * 获取房间号为roomNumber的所有行动
