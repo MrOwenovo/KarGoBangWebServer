@@ -34,6 +34,6 @@ public interface RoomAction {
      * 创建记录下棋步数的数据库表，以room+房间号的形式
      * @param roomNumber
      */
-    void createRoomTable(String roomNumber);
+    int createRoomTable(String roomNumber);
 }
 

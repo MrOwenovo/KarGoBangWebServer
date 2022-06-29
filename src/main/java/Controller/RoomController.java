@@ -12,6 +12,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+import service.CreateRoomService;
+import service.MoveService;
 
 import javax.annotation.Resource;
 import javax.servlet.http.Cookie;
@@ -26,7 +28,13 @@ import java.security.Principal;
 public class RoomController {
 
     @Resource
+    CreateRoomService createRoomService;
+
+    @Resource
     RoomAction roomAction;
+
+    @Resource
+    MoveService moveService;
 
     //打开创建房间页面
     @RequestMapping(value = "/createRoom", method = RequestMethod.GET)
@@ -71,13 +79,13 @@ public class RoomController {
 
     //返回等待界面
     @RequestMapping(value = "/room", method = RequestMethod.POST)
-    public ModelAndView room(HttpServletResponse response) {
-        AuthUser principal = (AuthUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        response.addCookie(new Cookie("account", principal.getUsername()));
+    public String room(HttpServletResponse response) {
+//        AuthUser principal = (AuthUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        response.addCookie(new Cookie("account", principal.));
 //        if (principal instanceof Principal) {
 //            response.addCookie(new Cookie("auth",((Principal) principal).getName()));
 //        }
-        return new ModelAndView("room");
+        return "room";
     }
 
     //查看是否通过
@@ -143,18 +151,23 @@ public class RoomController {
     public String addRoomNumber(HttpServletRequest request, HttpServletResponse response, @RequestParam("number") String roomNumber, @RequestParam("password") String password) throws IOException {
         log.info("接收到的前端数据:" + roomNumber);
         System.out.println(roomNumber);
+        System.out.println(roomAction.getRoomNumber(roomNumber));
         if (roomAction.getRoomNumber(roomNumber) != null) {  //如果找到了该房间
             if (roomAction.getRoomNumber(roomNumber).getPassword().equals(password)) {  //密码正确
                 roomAction.updateIsReady(roomNumber);  //修改状态
                 response.addCookie(new Cookie("roomNumber", roomNumber));
-                AuthUser principal = (AuthUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-                response.addCookie(new Cookie("account", principal.getUsername()));
-                if (principal instanceof Principal) {
-                    response.addCookie(new Cookie("auth", ((Principal) principal).getName()));
-                }
-                roomAction.createRoomTable(roomNumber); //创建棋子表
+//                AuthUser principal = (AuthUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//                response.addCookie(new Cookie("account", principal.getUsername()));
+//                if (principal instanceof Principal) {
+//                    response.addCookie(new Cookie("auth", ((Principal) principal).getName()));
+//                }
+                System.out.println("准备创建表");
+//                createRoomService.createRoom(roomNumber);
+//                System.out.println(i);
+                System.out.println("创建表后位置");
                 return "RoomFirstPerson";
             } else {
+                System.out.println("密码错误："+roomAction.getRoomNumber(roomNumber).getPassword());
                 return "addRoomPasswordError";
             }
         } else {

@@ -3,6 +3,7 @@ package dao.impl;
 import dao.RoomAction;
 import dao.mapper.RoomActionMapper;
 import entity.Room;
+import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -48,8 +49,12 @@ public class RoomActionImpl implements RoomAction {
         return roomActionMapper.updateIsReady(1, roomNumber);
     }
 
+    @SneakyThrows
     @Override
-    public void createRoomTable(String roomNumber) {
-        roomActionMapper.createRoomTable("room"+roomNumber);  //创建表
+    public int createRoomTable(String roomNumber) {
+        System.out.println("来到dao方法");
+        Thread.sleep(1000);
+        return roomActionMapper.createFriendsTable("room_"+roomNumber);  //创建表
+
     }
 }

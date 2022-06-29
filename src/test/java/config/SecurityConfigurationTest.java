@@ -3,6 +3,8 @@ package config;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import java.util.Map;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class SecurityConfigurationTest {
@@ -11,6 +13,7 @@ class SecurityConfigurationTest {
     public void test() {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();  //这里使用SpringSecurity提供的BCryptPasswordEncoder
         System.out.println(encoder.encode("123456"));
+
     }
 
 }

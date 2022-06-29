@@ -10,17 +10,34 @@
                  WEAK：弱引用，更积极地基于垃圾收集器状态和弱引用规则移除对象-->
 
 
-    <update id="createRoomTable" parameterType="string" statementType="STATEMENT">
+<!--    <update id="createRoomTable" parameterType="string" statementType="STATEMENT">-->
+<!--        CREATE TABLE  ${tableName} (-->
+<!--&#45;&#45;                                        `index` int(100) NOT NULL,AUTO_INCREMENT PRIMARY KEY,-->
+<!--                                       `poster` varchar(100) DEFAULT NULL,-->
+<!--                                       `getter` varchar(100) DEFAULT NULL,-->
+<!--                                       `locationX` int(11) DEFAULT NULL,-->
+<!--                                       `locationY` int(11) DEFAULT NULL,-->
+<!--                                       `type` varchar(100) DEFAULT NULL,-->
+<!--                                       `locationZ` int(11) DEFAULT NULL-->
+<!--        )-->
+<!--    </update>-->
+
+    <update id="createFriendsTable" parameterType="string" statementType="STATEMENT">
         CREATE TABLE  ${tableName} (
-                                       `index` int(100) NOT NULL,AUTO_INCREMENT PRIMARY KEY,
-                                       `poster` varchar(100) DEFAULT NULL,
-                                       `getter` varchar(100) DEFAULT NULL,
-                                       `locationX` int(11) NOT NULL,
-                                       `locationY` int(11) NOT NULL,
-                                       `type` varchar(100) DEFAULT NULL,
-                                       `locationZ` int(11) NOT NULL,
+                                       `index` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                                       `friends` varchar(100) DEFAULT NULL,
+                                       `chatLocation` varchar(100) DEFAULT NULL
         )
     </update>
+
+<!--    <update id="createFriendsTable" parameterType="string" statementType="STATEMENT">-->
+<!--        create table  ${tableName}(-->
+<!--                                                       id int not null AUTO_INCREMENT,-->
+<!--                                                       gid int not null,-->
+<!--                                                       primary key(id),-->
+<!--                                                       unique key(gid))-->
+<!--                        ENGINE= MYISAM CHARACTER SET utf8-->
+<!--    </update>-->
 
 
 </mapper>

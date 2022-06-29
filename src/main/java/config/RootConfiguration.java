@@ -18,7 +18,9 @@ import javax.sql.DataSource;
 @ComponentScans({
         @ComponentScan("dao.impl"),
         @ComponentScan("dao"),
-        @ComponentScan("entity")
+        @ComponentScan("entity"),
+        @ComponentScan("service"),
+        @ComponentScan("service.Impl")
 })
 @MapperScan("dao.mapper")
 @Configuration
