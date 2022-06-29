@@ -50,25 +50,54 @@ public class GameController {
     public Object whiteMove(@RequestBody Move move, HttpServletRequest request) {
         log.info("白棋走了："+move);
         Cookie[] cookies = request.getCookies();
-        String roomNumber = null;
-        int movesAmount = 0;  //走的总步数
-        for (Cookie cookie : cookies) {
-            if (cookie.getName().equals("roomNumber")) {
-                roomNumber = cookie.getValue();
-                moveService.whiteMove(cookie.getValue(),move.getX(),move.getY(),move.getZ());
-                Move[] moves = moveService.getMoves(roomNumber);//获取一遍走的步数
-                movesAmount = moves.length; //赋值
-            }
-        }
-        while (true) {
-            Thread.sleep(1000);
-            Move[] moves = moveService.getMoves(roomNumber);
-            if (moves.length > movesAmount) {
-                return moves[moves.length - 1];
-            }
+//        String roomNumber = null;
+//        int movesAmount = 0;  //走的总步数
+//        for (Cookie cookie : cookies) {
+//            if (cookie.getName().equals("roomNumber")) {
+//                roomNumber = cookie.getValue();
+////                moveService.whiteMove(cookie.getValue(),move.getX(),move.getY(),move.getZ());
+//                Move[] moves = moveService.getMoves(roomNumber);//获取一遍走的步数
+//                movesAmount = moves.length; //赋值
+//            }
+//        }
+//        while (true) {
+//            Thread.sleep(1000);
+//            Move[] moves = moveService.getMoves(roomNumber);
+//            if (moves.length > movesAmount) {
+//                return moves[moves.length - 1];
+//            }
+//
+//        }
+        return "{\"" + "x\":" + 1 + ",\"y\":" + 1 + ",\"z\":" + 0 + ",\"type\":" + "\"black\"" + "}";
+//        return new Move("1","1","0","black");
+    }
 
-        }
-//        return JSON.parse("1");
+    @SneakyThrows
+    @RequestMapping(value = "/responseWhite", method = RequestMethod.GET,produces = {"application/json"})
+    @ResponseBody
+    public Object responseToWhiteMove(HttpServletRequest request) {
+        log.info("白棋等待接收...");
+        Cookie[] cookies = request.getCookies();
+//        String roomNumber = null;
+//        int movesAmount = 0;  //走的总步数
+//        for (Cookie cookie : cookies) {
+//            if (cookie.getName().equals("roomNumber")) {
+//                roomNumber = cookie.getValue();
+////                moveService.whiteMove(cookie.getValue(),move.getX(),move.getY(),move.getZ());
+//                Move[] moves = moveService.getMoves(roomNumber);//获取一遍走的步数
+//                movesAmount = moves.length; //赋值
+//            }
+//        }
+//        while (true) {
+//            Thread.sleep(1000);
+//            Move[] moves = moveService.getMoves(roomNumber);
+//            if (moves.length > movesAmount) {
+//                return moves[moves.length - 1];
+//            }
+//
+//        }
+        return "{\"" + "x\":" + 1 + ",\"y\":" + 1 + ",\"z\":" + 0 + ",\"type\":" + "\"black\"" + "}";
+//        return new Move("1","1","0","black");
     }
 
     @SneakyThrows
