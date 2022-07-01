@@ -1,5 +1,6 @@
 ## 项目简述
 ### 三维四子棋Web服务器：
+- springMVC项目，后会转为springBoot
 - 用于展示三维四子棋的相关网站，如选择AI，本地，联机，熄灯模式
 - 实现联机的与后端的对接
 - springSecurity登录界面
