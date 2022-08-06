@@ -47,9 +47,10 @@ public class GameController {
     @SneakyThrows
     @RequestMapping(value = "/whiteMove", method = RequestMethod.POST,produces = {"application/json"})
     @ResponseBody
-    public Object whiteMove(@RequestBody Move move, HttpServletRequest request) {
+    public Object whiteMove(@CookieValue(value = "roomNumber",required = true) String roomNumber,@RequestBody Move move, HttpServletRequest request) {
         log.info("白棋走了："+move);
-        Cookie[] cookies = request.getCookies();
+        System.out.println(roomNumber);
+
 //        String roomNumber = null;
 //        int movesAmount = 0;  //走的总步数
 //        for (Cookie cookie : cookies) {
@@ -99,6 +100,8 @@ public class GameController {
         return "{\"" + "x\":" + 1 + ",\"y\":" + 1 + ",\"z\":" + 0 + ",\"type\":" + "\"black\"" + "}";
 //        return new Move("1","1","0","black");
     }
+
+
 
     @SneakyThrows
     @RequestMapping(value = "/blackMove", method = RequestMethod.POST,produces = {"application/json"})

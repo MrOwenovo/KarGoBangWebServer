@@ -62,7 +62,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.exceptionHandling().accessDeniedPage("/error.html");//配置没有权限访问跳转的自定义页面
+        http.exceptionHandling().accessDeniedPage("/login");//配置没有权限访问跳转的自定义页面
         http
                 .authorizeRequests()  //首先需要配置哪些请求会被拦截，哪些请求必须具有什么角色才能访问
                 .antMatchers("/static/**").permitAll()  //静态资源，使用permitAll来让任何人访问
@@ -72,6 +72,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/whiteMove").permitAll()  //静态资源，使用permitAll来让任何人访问
                 .antMatchers("/blackMove").permitAll()  //静态资源，使用permitAll来让任何人访问
                 .antMatchers("/wait").permitAll()  //静态资源，使用permitAll来让任何人访问
+                .antMatchers("/selectAI").hasRole("user")
 //                .antMatchers("/login").hasAnyRole("user", "admin")  //所有请求必须登录并且是user角色才可以访问
                 .anyRequest().hasRole("admin")  //所有请求必须登录并且是user角色才可以访问
 
