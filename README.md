@@ -6,8 +6,7 @@
 - springSecurity登录界面
 - 整合web3d引擎，展示三维四子棋画面，以及加载画面等 <br>
 
-服务于三维四子棋客户端 <br>
-[三维四子棋客户端:KarGoBangClient](https://github.com/MrOwenovo/KarGoBangClient)
+[三维四子棋首页](https://4l1271j523.zicp.fun/)
 
 ## 下载地址:
 三维四子棋游客试玩(无法联机):
