@@ -8,7 +8,10 @@
 - 整合web3d引擎，展示三维四子棋画面，以及加载画面等 <br>
 
 ## 首页地址:
-[三维四子棋首页](https://4l1271j523.zicp.fun/)
+[三维四子棋首页:https://4l1271j523.zicp.fun/](https://4l1271j523.zicp.fun/)
+
+## 后端接口文档swagger访问地址:
+[swagger文档:https://41271w5c23.zicp.vip/swagger-ui/](https://41271w5c23.zicp.vip/swagger-ui/)
 
 ## 项目内容:
 > ### KarGoBangWebServer内容:
