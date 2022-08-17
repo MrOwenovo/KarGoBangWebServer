@@ -1,23 +1,26 @@
 ## 项目简述
 ### 三维四子棋Web服务器：
-- springMVC项目，后会转为springBoot
+- =springBoot项目，后续转为springCloud项目
 - 用于展示三维四子棋的相关网站，如选择AI，本地，联机，熄灯模式
+- 将前端页面部署在Nginx反向代理服务器，并转发后端请求
 - 实现联机的与后端的对接
 - springSecurity登录界面
 - 整合web3d引擎，展示三维四子棋画面，以及加载画面等 <br>
 
+## 首页地址:
 [三维四子棋首页](https://4l1271j523.zicp.fun/)
-
-## 下载地址:
-三维四子棋游客试玩(无法联机):
 
 ## 项目内容:
 > ### KarGoBangWebServer内容:
+![1.png](https://s2.loli.net/2022/08/17/r1GHgfbmvZFnKpM.png)
+![2.png](https://s2.loli.net/2022/08/17/EO8tVco2jl1Yzgu.png)
+<p align="center">首页内容</p>
+
 ![web1.png](https://s2.loli.net/2022/07/01/6Lplj4e1DQzHbUd.png)
 <p align="center">springSecurity登录界面</p>
 
-![web3.png](https://s2.loli.net/2022/07/01/fmsPlG7W8cydizC.png)
-<p align="center">维四子棋-AI,本地,联机选择</p>
+![3.png](https://s2.loli.net/2022/08/17/tn5hapXFLEHWvsm.png)
+<p align="center">维四子棋-AI,本地,熄灯模式选择</p>
 
 ![wev4.png](https://s2.loli.net/2022/07/01/rN7jUsVJqiX2Fbz.png)
 <p align="center">三维四子棋AI-困难,中等,简单选择</p>
