@@ -1,0 +1,17 @@
+server:
+  port: 8080
+spring:
+  datasource:
+    url: jdbc:mysql://rm-2vcit6wbsp183z2a88o.mysql.cn-chengdu.rds.aliyuncs.com:3306/kagobang
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: Lmq1226lmq
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher  # 修复swagger版本不匹配bug
+  mail:
+    host: smtp.qq.com
+    username: lmq122677@qq.com
+    password: rgpyxammhfsfjfgc
+constant:
+  crossOriginValue: https://f01-1309918226.file.myqcloud.com
