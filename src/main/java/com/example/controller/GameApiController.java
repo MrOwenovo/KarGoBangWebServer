@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
 @Api(tags = "三维四子棋联机交互api",description = "完成三维四子棋的先手，后手，出棋以及获胜")
-@CrossOrigin(value = {"https://f01-1309918226.file.myqcloud.com","http://localhost:8668"},maxAge = 1800,allowCredentials = "true",allowedHeaders = "*")
+//@CrossOrigin(value = {"https://f01-1309918226.file.myqcloud.com","http://localhost:8668","https://41271w5c23.zicp.vip"},maxAge = 1800,allowCredentials = "true",allowedHeaders = "*")
 @RestController
 @RequestMapping("/api/game")
 public class GameApiController {

@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
  * 全局异常处理
  */
 @RestControllerAdvice
-@Order(Ordered.HIGHEST_PRECEDENCE)
+@Order
 public class OverallExceptionHandler {
 
     @ExceptionHandler

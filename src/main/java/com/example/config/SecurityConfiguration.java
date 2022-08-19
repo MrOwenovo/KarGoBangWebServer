@@ -3,8 +3,11 @@ package com.example.config;
 import com.alibaba.fastjson.JSON;
 import com.example.entity.repo.RestBean;
 import com.example.entity.repo.ResultCode;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.Ordered;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -23,11 +26,14 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Collections;
 
 /**
  * springSecurity配置
  */
 @Configuration
+@Slf4j
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 
@@ -88,25 +94,35 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
 
-    @Bean
-    public CorsFilter configure() {
+    private CorsConfiguration buildConfig() {
         //创建CorsConfiguration对象后添加配置
         CorsConfiguration config = new CorsConfiguration();
         //设置放行哪些原始域，这里设置为所有
         config.addAllowedOriginPattern("*");
-        //你可以单独设置放行哪些原始域，
-        config.addAllowedOrigin("http://localhost:8668");
+//        //你可以单独设置放行哪些原始域，
+//        config.addAllowedOrigin("http://localhost:8668");
+//        config.setAllowedOrigins(Collections.singletonList("*"));
         //放行哪些原始请求头部信息
-        config.addAllowedHeader("*");
+//        config.addAllowedHeader(Arrays.asList("*"));
+        config.setAllowedHeaders(Collections.singletonList("*"));
         //放行哪些请求方式，*代表所有
-        config.addAllowedMethod("*");
+        config.setAllowedMethods(Arrays.asList("PUT", "POST", "GET", "OPTIONS", "DELETE"));
         //是否允许发送Cookie,必须要开启，因为我们的JSESSIONNID需要在Cookie中携带
         config.setAllowCredentials(true);
+        config.setExposedHeaders(Collections.singletonList("*"));
+        return config;
+    }
+
+    @Bean
+    public FilterRegistrationBean<CorsFilter> configure() {
+       log.info("CorsFilter跨域过滤器启用");
         // 映射路径
         UrlBasedCorsConfigurationSource corsConfigurationSource = new UrlBasedCorsConfigurationSource();
-        corsConfigurationSource.registerCorsConfiguration("/**", config);
-        //返回CorsFilter
-        return new CorsFilter(corsConfigurationSource);
+        corsConfigurationSource.registerCorsConfiguration("/**", buildConfig());
+        //项目中有多个filter时此处设置改CorsFilter的优先执行顺序
+        FilterRegistrationBean<CorsFilter> bean = new FilterRegistrationBean<>(new CorsFilter(corsConfigurationSource));
+        bean.setOrder(Ordered.HIGHEST_PRECEDENCE);
+        return bean;
     }
 
 
