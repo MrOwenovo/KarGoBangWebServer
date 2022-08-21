@@ -1,6 +1,8 @@
 package com.example.service.impl;
 
 import com.example.controller.exception.NotExistInRedisException;
+import com.example.controller.exception.ThreadLocalIsNullException;
+import com.example.entity.constant.ThreadDetails;
 import com.example.entity.data.ChessDetail;
 import com.example.service.GameService;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -28,22 +30,17 @@ public class GameServiceImpl implements GameService {
 
     private final static String OPPONENT_BLACK_IN_TOKEN_KEY = "game:opponent:black:";
 
-    private ThreadLocal<String> ROOM_NUMBER ;
 
     @Resource
     RedisTemplate<Object, Object> template;
 
-    @PostConstruct
-    public void init() {
-        ROOM_NUMBER = RoomServiceImpl.getRoomNumber();
-
-    }
 
     @Transactional
     @Override
     public boolean whiteMove(int x, int y, int z) {
-        //获取房间号
-        String roomNumber = ROOM_NUMBER.get();
+        //从redis获取房间号
+        String roomNumber = ThreadDetails.redisRoomNumber.get();
+        if (roomNumber == null) throw new ThreadLocalIsNullException("ThreadDetails中没有RoomNumber!");
         //获取白棋目前步数
         Object whiteIndexObject = template.opsForValue().get(WHITE_INDEX_TOKEN_KEY + roomNumber);
         if(whiteIndexObject==null) throw new NotExistInRedisException("redis数据库中没有白棋步数数据");
@@ -65,7 +62,8 @@ public class GameServiceImpl implements GameService {
     @Override
     public boolean blackMove(int x, int y, int z) {
         //获取房间号
-        String roomNumber = ROOM_NUMBER.get();
+        String roomNumber = ThreadDetails.redisRoomNumber.get();
+        if (roomNumber == null) throw new ThreadLocalIsNullException("ThreadDetails中没有RoomNumber!");
         //获取黑棋目前步数
         Object blackIndexObject = template.opsForValue().get(BLACK_INDEX_TOKEN_KEY + roomNumber);
         if(blackIndexObject==null) throw new NotExistInRedisException("redis数据库中没有黑棋步数数据");
@@ -86,7 +84,8 @@ public class GameServiceImpl implements GameService {
     @Override
     public ChessDetail waitForWhiteMove() {
         //获取房间号
-        String roomNumber = ROOM_NUMBER.get();
+        String roomNumber = ThreadDetails.redisRoomNumber.get();
+        if (roomNumber == null) throw new ThreadLocalIsNullException("ThreadDetails中没有RoomNumber!");
         //获取黑棋步数
         Object blackIndexObject = template.opsForValue().get(BLACK_INDEX_TOKEN_KEY + roomNumber);
         if(blackIndexObject==null) throw new NotExistInRedisException("redis数据库中没有黑棋步数数据");
@@ -102,7 +101,8 @@ public class GameServiceImpl implements GameService {
     @Override
     public ChessDetail waitForBlackMove() {
         //获取房间号
-        String roomNumber = ROOM_NUMBER.get();
+        String roomNumber = ThreadDetails.redisRoomNumber.get();
+        if (roomNumber == null) throw new ThreadLocalIsNullException("ThreadDetails中没有RoomNumber!");
         //获取白棋步数
         Object whiteIndexObject = template.opsForValue().get(WHITE_INDEX_TOKEN_KEY + roomNumber);
         if(whiteIndexObject==null) throw new NotExistInRedisException("redis数据库中没有白棋步数数据");
@@ -118,7 +118,8 @@ public class GameServiceImpl implements GameService {
     @Override
     public boolean whiteWaitForOpponent() {
         //获取房间号
-        String roomNumber = ROOM_NUMBER.get();
+        String roomNumber = ThreadDetails.redisRoomNumber.get();
+        if (roomNumber == null) throw new ThreadLocalIsNullException("ThreadDetails中没有RoomNumber!");
         //从redis中查看是否黑棋已经开始准备下子
         Object flag = template.opsForValue().get(OPPONENT_BLACK_IN_TOKEN_KEY + roomNumber);
         if (flag== null) throw new NotExistInRedisException("黑棋尚未准备开始游戏");
@@ -130,7 +131,8 @@ public class GameServiceImpl implements GameService {
     @Override
     public boolean blackWaitForOpponent() {
         //获取房间号
-        String roomNumber = ROOM_NUMBER.get();
+        String roomNumber = ThreadDetails.redisRoomNumber.get();
+        if (roomNumber == null) throw new ThreadLocalIsNullException("ThreadDetails中没有RoomNumber!");
         //从redis中查看是否白棋已经开始准备下子
         Object flag = template.opsForValue().get(OPPONENT_WHITE_IN_TOKEN_KEY + roomNumber);
         if (flag== null) throw new NotExistInRedisException("白棋尚未准备开始游戏");
@@ -142,19 +144,21 @@ public class GameServiceImpl implements GameService {
     @Override
     public boolean whiteIsIn() {
         //获取房间号
-        String roomNumber = ROOM_NUMBER.get();
+        String roomNumber = ThreadDetails.redisRoomNumber.get();
+        if (roomNumber == null) throw new ThreadLocalIsNullException("ThreadDetails中没有RoomNumber!");
         //将自己已经进入房间的信息存储到Redis中
         template.opsForValue().set(OPPONENT_WHITE_IN_TOKEN_KEY+roomNumber,"true");
         template.expire(OPPONENT_WHITE_IN_TOKEN_KEY + roomNumber, 3, TimeUnit.MINUTES);
         //初始化白棋步数，防止拿取时空指针异常
-        template.opsForValue().set(WHITE_INDEX_TOKEN_KEY+roomNumber,0);
+        template.opsForValue().set(WHITE_INDEX_TOKEN_KEY+roomNumber,-1);
         template.expire(WHITE_INDEX_TOKEN_KEY + roomNumber, 3, TimeUnit.MINUTES);
         return true;
     }
     @Override
     public boolean blackIsIn() {
         //获取房间号
-        String roomNumber = ROOM_NUMBER.get();
+        String roomNumber = ThreadDetails.redisRoomNumber.get();
+        if (roomNumber == null) throw new ThreadLocalIsNullException("ThreadDetails中没有RoomNumber!");
         //将自己已经进入房间的信息存储到Redis中
         template.opsForValue().set(OPPONENT_BLACK_IN_TOKEN_KEY+roomNumber,"true");
         template.expire(OPPONENT_BLACK_IN_TOKEN_KEY + roomNumber, 3, TimeUnit.MINUTES);

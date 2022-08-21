@@ -1,16 +1,29 @@
 package com.example.controller;
 
+import com.example.entity.constant.ThreadDetails;
+import com.example.entity.data.UserDetail;
 import com.example.entity.repo.RestBean;
 import com.example.entity.repo.RestBeanBuilder;
 import com.example.entity.repo.ResultCode;
 import com.example.service.AuthService;
 import com.example.service.VerifyService;
+import com.example.service.util.IpTools;
 import io.swagger.annotations.*;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
+@Slf4j
 @Api(tags = "用户验证", description = "用户登录成功或失败等,含有游客登录")
 @RestController
 @RequestMapping("/api/auth")
@@ -23,7 +36,13 @@ public class AuthApiController {
 
     @ApiIgnore
     @PostMapping("/login-success")
-    public RestBean<Object> loginSuccess() {
+    public RestBean<Object> loginSuccess(HttpServletRequest request) {
+        //打印日志
+        SecurityContext context = SecurityContextHolder.getContext();
+        ThreadDetails.securityContext.set(context);
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        log.info("Ip为[{}],username为[{}]的玩家登录:[{}]", IpTools.getIpAddress(request),((User)context.getAuthentication().getPrincipal()).getUsername(),format.format(new Date()));
+        //将用户的JSESSIONID存入redis
         return RestBeanBuilder.builder().code(ResultCode.LOGIN_SUCCESS).build().ToRestBean();
     }
 

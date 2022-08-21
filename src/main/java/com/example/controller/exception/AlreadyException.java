@@ -11,7 +11,7 @@ import com.example.entity.repo.ResultCode;
 public class AlreadyException extends RuntimeException{
 
     public AlreadyException() {
-        super();
+        super("");
     }
 
     public AlreadyException(String message) {

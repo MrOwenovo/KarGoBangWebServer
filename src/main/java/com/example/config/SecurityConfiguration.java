@@ -54,7 +54,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/swagger**/**","/webjars/**","/v2/**","/doc.html").permitAll()  //允许swagger放行
+                .antMatchers("/swagger**/**","/webjars/**","/v2/**","/doc.html","/pre/**","/api/game/**").permitAll()  //允许swagger放行
                 .antMatchers("/api/auth/access-deny").permitAll()
                 .antMatchers("/api/**", "/api/auth/login-success").authenticated()
                 .antMatchers("/api/auth/guest/isGuest","/api/room/**").hasRole("user")

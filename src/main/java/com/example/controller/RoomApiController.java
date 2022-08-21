@@ -8,6 +8,7 @@ import io.swagger.annotations.*;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 @Api(tags = "房间验证",description = "用于远程联机的房间验证")
 @RestController
@@ -28,8 +29,8 @@ public class RoomApiController {
     })
     @ApiOperation(value = "发起创建房间请求",notes = "用房间号创建房间，无加密号")
     @PostMapping("/createRoom")
-    public RestBean<Object> createRoom(@RequestParam(value = "number") String number) {
-        roomService.createRoom(number);
+    public RestBean<Object> createRoom(HttpServletRequest request, @RequestParam(value = "number") String number) {
+        roomService.createRoom(request,number);
         return RestBeanBuilder.builder().code(ResultCode.CREATE_ROOM_SUCCESS).build().ToRestBean();
 
     }
@@ -45,8 +46,8 @@ public class RoomApiController {
     })
     @ApiOperation(value = "发起创建加密房间请求",notes = "用房间号和加密号创建房间")
     @PostMapping("/createRoomSecret")
-    public RestBean<Object> createRoomSecret(@RequestParam(value = "number") String number,@RequestParam("password") String password) {
-        roomService.createRoomSecret(number,password);
+    public RestBean<Object> createRoomSecret(HttpServletRequest request,@RequestParam(value = "number") String number,@RequestParam("password") String password) {
+        roomService.createRoomSecret(request,number,password);
         return RestBeanBuilder.builder().code(ResultCode.CREATE_ROOM_SUCCESS).build().ToRestBean();
     }
 
@@ -60,8 +61,8 @@ public class RoomApiController {
     })
     @ApiOperation(value = "发起加入房间请求",notes = "用房间号和加密号加入房间")
     @PostMapping("/addRoom")
-    public RestBean<Object> addRoom(@RequestParam(value = "number") String number,@RequestParam("password") String password) {
-        return roomService.addRoomAndCallBack(number,password)?
+    public RestBean<Object> addRoom(HttpServletRequest request,@RequestParam(value = "number") String number,@RequestParam("password") String password) {
+        return roomService.addRoom(request,number,password)?
          RestBeanBuilder.builder().code(ResultCode.ADD_ROOM_SUCCESS).build().ToRestBean():
          RestBeanBuilder.builder().code(ResultCode.ADD_ROOM_FAILURE).build().ToRestBean();
     }
@@ -75,8 +76,8 @@ public class RoomApiController {
     @ApiOperation(value = "查看对手是否加入房间",notes = "每隔三秒请求一次，判断对手是否进入房间")
     @GetMapping("/waitForOpponent")
     public RestBean<Object> waitForOpponent() {
-        return roomService.waitForOpponent()?
-                RestBeanBuilder.builder().code(ResultCode.OPPONENT_IS_IN).build().ToRestBean():
-                RestBeanBuilder.builder().code(ResultCode.OPPONENT_NOT_IN).build().ToRestBean();
+        roomService.waitForOpponent();
+        return RestBeanBuilder.builder().code(ResultCode.OPPONENT_IS_IN).build().ToRestBean();
+
     }
 }

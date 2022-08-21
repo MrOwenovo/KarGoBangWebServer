@@ -9,6 +9,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.annotation.Resource;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 @SpringBootTest
 class KarGoBangWebServerApplicationTests {
@@ -25,7 +27,9 @@ class KarGoBangWebServerApplicationTests {
 
     @Test
     void contextLoads() throws Exception {
-        System.out.println(ApplicationPro.crossOriginValue);
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        System.out.println(format.format(new Date()));
+
     }
 
 }

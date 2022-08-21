@@ -43,7 +43,7 @@ public class AuthGuestApiController extends AuthApiController{
     @GetMapping("/isGuest")
     public RestBean<Object> isGuest() {
         //让security自动判断是否有权限
-        return null;
+        return RestBeanBuilder.builder().code(ResultCode.SUCCESS).build().ToRestBean();
     }
 
     @ApiIgnore

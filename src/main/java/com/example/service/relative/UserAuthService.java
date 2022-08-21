@@ -21,7 +21,6 @@ public class UserAuthService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         UserDetail userDetail = mapper.findUserById(username).orElseThrow(() -> new UsernameNotFoundException("用户" + username + "不存在!"));
-        System.out.println(userDetail.getPassword());
         return User
                 .withUsername(userDetail.getUsername())
                 .password(new BCryptPasswordEncoder()

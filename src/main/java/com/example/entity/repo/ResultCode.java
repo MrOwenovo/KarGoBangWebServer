@@ -36,6 +36,8 @@ public enum ResultCode {
 
     WAIT_BLACK_MOVE_SUCCESS(200, "黑棋已经下子!"),
 
+    JSESSIONID_IS_RETURN(200,"已经将jSessionId返回"),
+
 
 
 
@@ -63,7 +65,13 @@ public enum ResultCode {
 
     WHITE_MOVE_FAILURE(410, "解析白棋行动失败"),
 
-    BLACK_MOVE_FAILURE(411, "解析黑棋行动失败");
+    BLACK_MOVE_FAILURE(411, "解析黑棋行动失败"),
+
+    THREAD_LOCAL_IS_NULL(412, "从ThreadLocal中取出为空时抛出的异常"),
+
+    PASSWORD_IS_WRONG(413,"密码错误!"),
+
+    NOT_EXIST_IN_COOKIE(414,"在请求头中不存在该Cookie!");
 
 
 

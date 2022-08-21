@@ -6,7 +6,7 @@ package com.example.controller.exception;
 public class NotExistInRedisException extends RuntimeException{
 
     public NotExistInRedisException() {
-        super();
+        super("");
     }
 
     public NotExistInRedisException(String message) {
