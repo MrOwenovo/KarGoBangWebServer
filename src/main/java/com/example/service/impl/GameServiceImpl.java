@@ -37,49 +37,30 @@ public class GameServiceImpl implements GameService {
 
     @Transactional
     @Override
-    public boolean whiteMove(int x, int y, int z) {
+    public boolean move(int x, int y, int z,int type) {
         //从redis获取房间号
         String roomNumber = ThreadDetails.redisRoomNumber.get();
         if (roomNumber == null) throw new ThreadLocalIsNullException("ThreadDetails中没有RoomNumber!");
-        //获取白棋目前步数
-        Object whiteIndexObject = template.opsForValue().get(WHITE_INDEX_TOKEN_KEY + roomNumber);
-        if(whiteIndexObject==null) throw new NotExistInRedisException("redis数据库中没有白棋步数数据");
-        int whiteIndex = (int)whiteIndexObject;
+        Object indexObject = null;
+        //获得棋子步数
+        indexObject = template.opsForValue().get((type==WHITE?WHITE_INDEX_TOKEN_KEY:BLACK_INDEX_TOKEN_KEY) + roomNumber);
+        if(indexObject==null) throw new NotExistInRedisException("redis数据库中没有"+(type==WHITE?"白":"黑")+"棋步数数据");
+        int index = (int)indexObject;
+
         //将棋子行动存储到Redis中
-        HashMap<String, Integer> whiteMove = new HashMap<>();
-        whiteMove.put("x", x);
-        whiteMove.put("y", y);
-        whiteMove.put("z", z);
-        template.opsForHash().putAll(WHITE_MOVE_TOKEN_KEY+roomNumber+":"+whiteIndex,whiteMove);
-        template.expire(WHITE_MOVE_TOKEN_KEY + roomNumber + ":" + whiteIndex, 3, TimeUnit.MINUTES);
-        //让白棋步数+1
-        template.opsForValue().set(WHITE_INDEX_TOKEN_KEY + roomNumber,whiteIndex+1);
-        template.expire(WHITE_INDEX_TOKEN_KEY + roomNumber,3,TimeUnit.MINUTES);
+        HashMap<String, Integer> move = new HashMap<>();
+        move.put("x", x);
+        move.put("y", y);
+        move.put("z", z);
+
+        template.opsForHash().putAll((type==WHITE?WHITE_MOVE_TOKEN_KEY:BLACK_MOVE_TOKEN_KEY)+roomNumber+":"+index,move);
+        template.expire((type==WHITE?WHITE_MOVE_TOKEN_KEY:BLACK_MOVE_TOKEN_KEY) + roomNumber + ":" + index, 3, TimeUnit.MINUTES);
+        //让棋子步数+1
+        template.opsForValue().set((type==WHITE?WHITE_INDEX_TOKEN_KEY:BLACK_INDEX_TOKEN_KEY) + roomNumber,index+1);
+        template.expire((type==WHITE?WHITE_INDEX_TOKEN_KEY:BLACK_INDEX_TOKEN_KEY) + roomNumber,3,TimeUnit.MINUTES);
         return true;
     }
 
-    @Transactional
-    @Override
-    public boolean blackMove(int x, int y, int z) {
-        //获取房间号
-        String roomNumber = ThreadDetails.redisRoomNumber.get();
-        if (roomNumber == null) throw new ThreadLocalIsNullException("ThreadDetails中没有RoomNumber!");
-        //获取黑棋目前步数
-        Object blackIndexObject = template.opsForValue().get(BLACK_INDEX_TOKEN_KEY + roomNumber);
-        if(blackIndexObject==null) throw new NotExistInRedisException("redis数据库中没有黑棋步数数据");
-        int blackIndex = (int) blackIndexObject;
-        //将棋子行动存储到Redis中
-        HashMap<String, Integer> blackMove = new HashMap<>();
-        blackMove.put("x", x);
-        blackMove.put("y", y);
-        blackMove.put("z", z);
-        template.opsForHash().putAll(BLACK_MOVE_TOKEN_KEY+roomNumber+":"+blackIndex,blackMove);
-        template.expire(BLACK_MOVE_TOKEN_KEY+roomNumber+":"+blackIndex, 3, TimeUnit.MINUTES);
-        //让黑棋步数+1
-        template.opsForValue().set(BLACK_INDEX_TOKEN_KEY + roomNumber,blackIndex+1);
-        template.expire(BLACK_INDEX_TOKEN_KEY + roomNumber,3,TimeUnit.MINUTES);
-        return true;
-    }
 
     @Override
     public ChessDetail waitForWhiteMove() {
@@ -108,7 +89,7 @@ public class GameServiceImpl implements GameService {
         if(whiteIndexObject==null) throw new NotExistInRedisException("redis数据库中没有白棋步数数据");
         int whiteIndex = (int)whiteIndexObject;
         //从redis中查看是否黑棋有下子的消息
-        Map<Object, Object> blackMoveInfo = template.opsForHash().entries(BLACK_MOVE_TOKEN_KEY + roomNumber + ":" + whiteIndex);
+        Map<Object, Object> blackMoveInfo = template.opsForHash().entries(BLACK_MOVE_TOKEN_KEY + roomNumber + ":" + (whiteIndex-1));
         if (blackMoveInfo.isEmpty()) throw new NotExistInRedisException("黑棋尚未下子");
         //删除旧key
         template.delete(BLACK_MOVE_TOKEN_KEY + roomNumber + ":" + whiteIndex);
@@ -142,29 +123,16 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public boolean whiteIsIn() {
+    public boolean isIn(int type) {
         //获取房间号
         String roomNumber = ThreadDetails.redisRoomNumber.get();
         if (roomNumber == null) throw new ThreadLocalIsNullException("ThreadDetails中没有RoomNumber!");
         //将自己已经进入房间的信息存储到Redis中
-        template.opsForValue().set(OPPONENT_WHITE_IN_TOKEN_KEY+roomNumber,"true");
-        template.expire(OPPONENT_WHITE_IN_TOKEN_KEY + roomNumber, 3, TimeUnit.MINUTES);
-        //初始化白棋步数，防止拿取时空指针异常
-        template.opsForValue().set(WHITE_INDEX_TOKEN_KEY+roomNumber,-1);
-        template.expire(WHITE_INDEX_TOKEN_KEY + roomNumber, 3, TimeUnit.MINUTES);
-        return true;
-    }
-    @Override
-    public boolean blackIsIn() {
-        //获取房间号
-        String roomNumber = ThreadDetails.redisRoomNumber.get();
-        if (roomNumber == null) throw new ThreadLocalIsNullException("ThreadDetails中没有RoomNumber!");
-        //将自己已经进入房间的信息存储到Redis中
-        template.opsForValue().set(OPPONENT_BLACK_IN_TOKEN_KEY+roomNumber,"true");
-        template.expire(OPPONENT_BLACK_IN_TOKEN_KEY + roomNumber, 3, TimeUnit.MINUTES);
-        //初始化黑棋步数，防止拿取时空指针异常
-        template.opsForValue().set(BLACK_INDEX_TOKEN_KEY+roomNumber,0);
-        template.expire(BLACK_INDEX_TOKEN_KEY + roomNumber, 3, TimeUnit.MINUTES);
+        template.opsForValue().set((type==WHITE?OPPONENT_WHITE_IN_TOKEN_KEY:OPPONENT_BLACK_IN_TOKEN_KEY)+roomNumber,"true");
+        template.expire((type==WHITE?OPPONENT_WHITE_IN_TOKEN_KEY:OPPONENT_BLACK_IN_TOKEN_KEY) + roomNumber, 3, TimeUnit.MINUTES);
+        //初始化棋子步数，防止拿取时空指针异常
+        template.opsForValue().set((type==WHITE?WHITE_INDEX_TOKEN_KEY:BLACK_INDEX_TOKEN_KEY)+roomNumber,0);
+        template.expire((type==WHITE?WHITE_INDEX_TOKEN_KEY:BLACK_INDEX_TOKEN_KEY) + roomNumber, 3, TimeUnit.MINUTES);
         return true;
     }
 }

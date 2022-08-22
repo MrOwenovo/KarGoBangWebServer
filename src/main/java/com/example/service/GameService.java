@@ -4,13 +4,9 @@ import com.example.entity.data.ChessDetail;
 
 public interface GameService {
 
-    /**
-     * @param x x坐标
-     * @param y y坐标
-     * @param z z坐标
-     * @return 是否解析成功
-     */
-    boolean whiteMove(int x,int y,int z);
+    public final static int WHITE = 0;
+
+    public final static int BLACK = 1;
 
     /**
      * @param x x坐标
@@ -18,7 +14,7 @@ public interface GameService {
      * @param z z坐标
      * @return 是否解析成功
      */
-    boolean blackMove(int x,int y,int z);
+    boolean move(int x,int y,int z,int type);
 
 
     /**
@@ -49,14 +45,9 @@ public interface GameService {
     boolean blackWaitForOpponent();
 
     /**
-     * 白棋已经加入房间
+     * 棋子已经加入房间
      * @return 是否加入房间
      */
-    boolean whiteIsIn();
+    boolean isIn(int type);
 
-    /**
-     * 黑棋已经加入房间
-     * @return 是否加入房间
-     */
-    boolean blackIsIn();
 }

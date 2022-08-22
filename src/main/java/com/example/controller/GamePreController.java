@@ -55,18 +55,6 @@ public class GamePreController {
         String  sessionId = (String) o;
         Cookie cookie = new Cookie("JSESSIONID", sessionId);
         response.addCookie(cookie);
-//        //获取验证信息Authentication
-//        Object o = authService.getAuthentication().getPrincipal();
-//        User principal;
-//        if (o instanceof User) {
-//            principal = (User) o;
-//        } else {
-//            throw new Exception("redis中的authentication不是账号密码登录");
-//        }
-//        //通过UsernamePasswordAuthenticationToken后台登录
-//        SecurityContext securityContext = SecurityContextHolder.getContext();
-//        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(principal.getUsername(), new BCryptPasswordEncoder().encode(principal.getPassword()));
-//        securityContext.setAuthentication(token);
         return RestBeanBuilder.builder().code(ResultCode.LOGIN_SUCCESS).messageType(RestBeanBuilder.USER_DEFINED).message("后台登陆成功!").build().ToRestBean();
     }
 }

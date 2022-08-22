@@ -39,7 +39,7 @@ public class GameApiController {
     @ApiOperation(value = "白棋移动一次",notes = "白棋子此时移动了一枚棋子，并将坐标信息传入")
     @PostMapping("/whiteMove")
     public RestBean<Object> whiteMove(@RequestBody ChessDetail chessDetail) {
-        return gameService.whiteMove(chessDetail.getX(),chessDetail.getY(),chessDetail.getZ())?
+        return gameService.move(chessDetail.getX(),chessDetail.getY(),chessDetail.getZ(),GameService.WHITE)?
                 RestBeanBuilder.builder().code(ResultCode.WHITE_MOVE_SUCCESS).build().ToRestBean():
                 RestBeanBuilder.builder().code(ResultCode.WHITE_MOVE_FAILURE).build().ToRestBean();
     }
@@ -57,7 +57,7 @@ public class GameApiController {
     @ApiOperation(value = "黑棋移动一次",notes = "黑棋子此时移动了一枚棋子，并将坐标信息传入")
     @PostMapping ("/blackMove")
     public RestBean<Object> blackMove(@RequestBody ChessDetail chessDetail) {
-        return gameService.blackMove(chessDetail.getX(),chessDetail.getY(),chessDetail.getZ())?
+        return gameService.move(chessDetail.getX(),chessDetail.getY(),chessDetail.getZ(),GameService.BLACK)?
                 RestBeanBuilder.builder().code(ResultCode.BLACK_MOVE_SUCCESS).build().ToRestBean():
                 RestBeanBuilder.builder().code(ResultCode.BLACK_MOVE_FAILURE).build().ToRestBean();
     }
@@ -117,7 +117,7 @@ public class GameApiController {
     @ApiOperation(value = "白棋已经开始游戏",notes = "将白棋开始游戏的信息存入redis,等待对方接收")
     @GetMapping ("/whiteIsIn")
     public RestBean<Object> whiteIsIn() {
-        return gameService.whiteIsIn()?
+        return gameService.isIn(GameService.WHITE)?
                 RestBeanBuilder.builder().code(ResultCode.SUCCESS).build().ToRestBean():
                 RestBeanBuilder.builder().code(ResultCode.FAILURE).build().ToRestBean();
     }
@@ -129,7 +129,7 @@ public class GameApiController {
     @ApiOperation(value = "黑棋已经开始游戏",notes = "将黑棋开始游戏的信息存入redis,等待对方接收")
     @GetMapping ("/blackIsIn")
     public RestBean<Object> blackIsIn() {
-        return gameService.blackIsIn() ?
+        return gameService.isIn(GameService.BLACK) ?
                 RestBeanBuilder.builder().code(ResultCode.SUCCESS).build().ToRestBean() :
                 RestBeanBuilder.builder().code(ResultCode.FAILURE).build().ToRestBean();
     }
