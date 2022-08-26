@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit;
 @Service
 public class RoomServiceImpl implements RoomService {
 
-    private final static String ROOM_ID_TOKEN_KEY = "game:room:id:";
+    public final static String ROOM_ID_TOKEN_KEY = "game:room:id:";
 
     public final static String IP_ROOM_TOKEN_KEY = "game:room:user:ip-roomNumber:";
 
@@ -61,7 +61,6 @@ public class RoomServiceImpl implements RoomService {
         //将ip与session对应放到redis中
         redisTemplate.opsForValue().set(IP_SESSION_TOKEN_KEY +IpTools.getIpAddress(request),session.getId());
         redisTemplate.expire(IP_SESSION_TOKEN_KEY +IpTools.getIpAddress(request), 10, TimeUnit.MINUTES);
-        System.out.println(IP_SESSION_TOKEN_KEY +IpTools.getIpAddress(request));
 
 
         return true;
@@ -81,6 +80,8 @@ public class RoomServiceImpl implements RoomService {
             redisTemplate.delete(ROOM_ID_TOKEN_KEY + number);
             //将roomNumber以ip为key存入redis
             redisTemplate.opsForValue().set(IP_ROOM_TOKEN_KEY + IpTools.getIpAddress(request), number);
+            redisTemplate.expire(IP_ROOM_TOKEN_KEY + IpTools.getIpAddress(request), 10, TimeUnit.MINUTES);
+
             //将roomNumber存入session
             request.getSession().setAttribute("roomNumber",number);
 

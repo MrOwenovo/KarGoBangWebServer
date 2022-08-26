@@ -55,7 +55,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                 .antMatchers("/swagger**/**","/webjars/**","/v2/**","/doc.html","/pre/**","/api/game/**").permitAll()  //允许swagger放行
-                .antMatchers("/api/auth/access-deny").permitAll()
+                .antMatchers("/api/auth/access-deny","/api/auth/verify","/api/auth/register","api/auth/logout").permitAll()
                 .antMatchers("/api/**", "/api/auth/login-success").authenticated()
                 .antMatchers("/api/auth/guest/isGuest","/api/room/**").hasRole("user")
                 .antMatchers("/api/game/**").permitAll()

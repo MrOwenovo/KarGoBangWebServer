@@ -50,7 +50,6 @@ public class GamePreController {
     public RestBean<Object> preLogin(HttpServletRequest request,HttpServletResponse response) throws Exception {
         //从redis中获取session
         Object o = template.opsForValue().get(RoomServiceImpl.IP_SESSION_TOKEN_KEY + IpTools.getIpAddress(request));
-        System.out.println(RoomServiceImpl.IP_SESSION_TOKEN_KEY + IpTools.getIpAddress(request));
         if (o== null) throw new NotExistInRedisException("Redis中不存在该sessionId");
         String  sessionId = (String) o;
         Cookie cookie = new Cookie("JSESSIONID", sessionId);
