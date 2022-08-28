@@ -4,13 +4,16 @@ import io.swagger.annotations.ApiModel;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
+
+import java.io.Serializable;
 
 @ApiModel("用户信息类")
 @Data
 @AllArgsConstructor
-@FieldDefaults(makeFinal = true,level = AccessLevel.PRIVATE)
-public class UserInfoDetail {
+@NoArgsConstructor
+public class UserInfoDetail implements Serializable {
     public static final String USER_SEX_BOY = "男";
     public static final String USER_SEX_GIRL = "女";
 
@@ -18,4 +21,5 @@ public class UserInfoDetail {
     String message;
     String icon;
     String sex;
+    int user_id;
 }

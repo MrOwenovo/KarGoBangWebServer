@@ -3,6 +3,8 @@ package com.example.service;
 
 import org.springframework.security.core.Authentication;
 
+import javax.servlet.http.HttpServletResponse;
+
 public interface AuthService {
 
 
@@ -14,18 +16,6 @@ public interface AuthService {
      */
     boolean register(String username, String password);
 
-
-//    /**
-//     * 将springSecurity的Authentication存入redis
-//     * @return 是否存入成功
-//     */
-//    void setAuthentication();
-//
-//    /**
-//     * 从redis中取出Authentication
-//     * @return Authentication
-//     */
-//    Authentication getAuthentication();
 
 
 }

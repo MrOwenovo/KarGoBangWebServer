@@ -13,3 +13,8 @@ spring:
     host: smtp.qq.com
     username: lmq122677@qq.com
     password: rgpyxammhfsfjfgc
+#mybatis:
+#  mapper-locations: classpath:com/example/dao/*.xml
+#  type-aliases-package: com.example.entity.data
+constant:
+  crossOriginValue: https://f01-1309918226.file.myqcloud.com

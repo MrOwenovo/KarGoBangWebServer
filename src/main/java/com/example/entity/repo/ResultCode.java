@@ -38,6 +38,8 @@ public enum ResultCode {
 
     JSESSIONID_IS_RETURN(200,"已经将jSessionId返回"),
 
+    MODIFY_SUCCESS(200,"修改成功!"),
+
 
 
 
@@ -71,7 +73,9 @@ public enum ResultCode {
 
     PASSWORD_IS_WRONG(413,"密码错误!"),
 
-    NOT_EXIST_IN_COOKIE(414,"在请求头中不存在该Cookie!");
+    NOT_EXIST_IN_COOKIE(414,"在请求头中不存在该Cookie!"),
+
+    MODIFY_FAILURE(415,"修改失败!!");
 
 
 

@@ -1,5 +1,8 @@
 package com.example.controller;
 
+import com.example.controller.exception.NotExistInMysqlException;
+import com.example.controller.exception.ThreadLocalIsNullException;
+import com.example.dao.AuthMapper;
 import com.example.entity.constant.ThreadDetails;
 import com.example.entity.data.UserDetail;
 import com.example.entity.repo.RestBean;
@@ -20,6 +23,7 @@ import springfox.documentation.annotations.ApiIgnore;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -33,15 +37,17 @@ public class AuthApiController {
     VerifyService verifyService;
     @Resource
     AuthService authService;
+    @Resource
+    AuthMapper authMapper;
 
     @ApiIgnore
     @PostMapping("/login-success")
-    public RestBean<Object> loginSuccess(HttpServletRequest request) {
+    public RestBean<Object> loginSuccess(HttpServletRequest request, HttpServletResponse response) {
         //打印日志
         SecurityContext context = SecurityContextHolder.getContext();
         ThreadDetails.securityContext.set(context);
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        log.info("Ip为[{}],username为[{}]的玩家登录:[{}]", IpTools.getIpAddress(request),((User)context.getAuthentication().getPrincipal()).getUsername(),format.format(new Date()));
+        System.out.println("Ip为["+IpTools.getIpAddress(request)+"],username为["+((User)context.getAuthentication().getPrincipal()).getUsername()+"]的玩家登录:["+format.format(new Date())+"]");
         //将用户的JSESSIONID存入redis
         return RestBeanBuilder.builder().code(ResultCode.LOGIN_SUCCESS).build().ToRestBean();
     }

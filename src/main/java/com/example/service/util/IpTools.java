@@ -30,6 +30,7 @@ public class IpTools {
         }
         if (ThreadDetails.securityContext.get()!=null)
         log.info("用户[{}]的真实ip为[{}]", ThreadDetails.securityContext.get().getAuthentication().getName(), ip);
+        ip=ip.replace(",","").replace("127.0.0.1","").trim();
         return ip;
 
     }

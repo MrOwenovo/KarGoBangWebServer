@@ -40,11 +40,26 @@ public class OverallExceptionHandler {
 
     }
 
+    @ExceptionHandler(NotExistInMysqlException.class)
+    public RestBean<Object> handleNotExistInMysqlException(NotExistInMysqlException e) {
+        if ("".equals(e.getMessage()))
+            return RestBeanBuilder.builder().code(ResultCode.NOT_EXIST).build().ToRestBean();
+        return RestBeanBuilder.builder().code(ResultCode.NOT_EXIST).messageType(RestBeanBuilder.USER_DEFINED).message(e.getMessage()).build().ToRestBean();
+
+    }
+
     @ExceptionHandler(NotExistInRedisException.class)
     public RestBean<Object> handleNotExistInRedisException(NotExistInRedisException e) {
         if ("".equals(e.getMessage()))
             return RestBeanBuilder.builder().code(ResultCode.NOT_EXIST).build().ToRestBean();
         return RestBeanBuilder.builder().code(ResultCode.NOT_EXIST).messageType(RestBeanBuilder.USER_DEFINED).message(e.getMessage()).build().ToRestBean();
+
+    }
+    @ExceptionHandler(ModifyException.class)
+    public RestBean<Object> handleModifyException(ModifyException e) {
+        if ("".equals(e.getMessage()))
+            return RestBeanBuilder.builder().code(ResultCode.MODIFY_FAILURE).build().ToRestBean();
+        return RestBeanBuilder.builder().code(ResultCode.MODIFY_FAILURE).messageType(RestBeanBuilder.USER_DEFINED).message(e.getMessage()).build().ToRestBean();
 
     }
 

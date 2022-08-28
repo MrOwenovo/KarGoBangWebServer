@@ -1,6 +1,7 @@
 package com.example.service.relative;
 
 import com.example.dao.AuthMapper;
+import com.example.dao.UserMapper;
 import com.example.entity.data.UserDetail;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,14 +16,16 @@ import javax.annotation.Resource;
 public class UserAuthService implements UserDetailsService {
 
     @Resource
-    AuthMapper mapper;
+    UserMapper userMapper;
+    @Resource
+    AuthMapper authMapper;
 
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserDetail userDetail = mapper.findUserById(username).orElseThrow(() -> new UsernameNotFoundException("用户" + username + "不存在!"));
+        UserDetail userDetail = authMapper.findUserByUsername(username).orElseThrow(() -> new UsernameNotFoundException("用户" + username + "不存在!"));
         return User
-                .withUsername(userDetail.getUsername())
+                .withUsername(username)
                 .password(new BCryptPasswordEncoder()
                         .encode(userDetail.getPassword()))
                 .roles(userDetail.getRole())

@@ -53,6 +53,7 @@ public class RoomServiceImpl implements RoomService {
         //将roomNumber以ip为key存入redis
         redisTemplate.opsForValue().set(IP_ROOM_TOKEN_KEY + IpTools.getIpAddress(request), number);
         redisTemplate.expire(IP_ROOM_TOKEN_KEY + IpTools.getIpAddress(request), 10, TimeUnit.MINUTES);
+        System.out.println("createRoom: keys: "+IP_ROOM_TOKEN_KEY + IpTools.getIpAddress(request)+" values: "+number);
 
         //获取session
         HttpSession session = request.getSession();
@@ -81,6 +82,8 @@ public class RoomServiceImpl implements RoomService {
             //将roomNumber以ip为key存入redis
             redisTemplate.opsForValue().set(IP_ROOM_TOKEN_KEY + IpTools.getIpAddress(request), number);
             redisTemplate.expire(IP_ROOM_TOKEN_KEY + IpTools.getIpAddress(request), 10, TimeUnit.MINUTES);
+            System.out.println("addRoom: keys: "+IP_ROOM_TOKEN_KEY + IpTools.getIpAddress(request)+" values: "+number);
+
 
             //将roomNumber存入session
             request.getSession().setAttribute("roomNumber",number);

@@ -56,6 +56,7 @@ public class ThreadInitFilter implements Filter {
             //把roomNumber从redis中取出
             String roomNumber = (String) template.opsForValue().get(RoomServiceImpl.IP_ROOM_TOKEN_KEY+ IpTools.getIpAddress(request));
             ThreadDetails.redisRoomNumber.set(roomNumber);
+            System.out.println("game取出: ip:"+RoomServiceImpl.IP_ROOM_TOKEN_KEY+ IpTools.getIpAddress(request)+" values:"+roomNumber);
         }
         filterChain.doFilter(servletRequest,servletResponse);
 
