@@ -13,10 +13,10 @@
 [nginx服务器下载地址:https://github.com/MrOwenovo/nginx-KarGoBang](https://github.com/MrOwenovo/nginx-KarGoBang)
 
 ## 首页地址:
-[三维四子棋首页:https://4l1271j523.zicp.fun/](https://4l1271j523.zicp.fun/)
+[三维四子棋首页:https://bbzlhmsh3.neiwangyun.net/](https://bbzlhmsh3.neiwangyun.net/)
 
 ## 后端接口文档swagger访问地址:
-[swagger文档:https://41271w5c23.zicp.vip/swagger-ui/](https://41271w5c23.zicp.vip/swagger-ui/)
+[swagger文档:https://mch6xzsh3.neiwangyun.net/swagger-ui/](https://mch6xzsh3.neiwangyun.net/swagger-ui/)
 
 ## 项目内容:
 > ### KarGoBangWebServer内容:
