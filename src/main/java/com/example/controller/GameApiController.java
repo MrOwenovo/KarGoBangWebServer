@@ -138,5 +138,43 @@ public class GameApiController {
     public void pre(HttpServletResponse response) {  //处理预检请求
         response.addHeader("Content-Type","text/html; charset=utf-8");
     }
+
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "数据修改成功"),
+            @ApiResponse(code = 400,message = "数据修改失败"),
+    })
+    @ApiOperation(value = "获得胜利",notes = "获得胜利后，修改用户数据库信息")
+    @GetMapping ("/winGame")
+    public RestBean<Object> winGame() {
+        return gameService.gameResult(true) ?
+                RestBeanBuilder.builder().code(ResultCode.MODIFY_SUCCESS).build().ToRestBean() :
+                RestBeanBuilder.builder().code(ResultCode.MODIFY_FAILURE).build().ToRestBean();
+    }
+
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "数据修改成功"),
+            @ApiResponse(code = 400,message = "数据修改失败"),
+    })
+    @ApiOperation(value = "对局失败",notes = "对局失败后，修改用户数据库信息")
+    @GetMapping ("/failureGame")
+    public RestBean<Object> failureGame() {
+        return gameService.gameResult(false) ?
+                RestBeanBuilder.builder().code(ResultCode.MODIFY_SUCCESS).build().ToRestBean() :
+                RestBeanBuilder.builder().code(ResultCode.MODIFY_FAILURE).build().ToRestBean();
+    }
+
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "数据修改成功"),
+            @ApiResponse(code = 400,message = "数据修改失败"),
+    })
+    @ApiOperation(value = "修改熄灯",notes = "熄灯每过一关，检查是否修改数据库")
+    @PatchMapping ("/changePassNumber")
+    public RestBean<Object> changePassNumber(@RequestBody int number) {
+        return gameService.changePassNumber(number) ?
+                RestBeanBuilder.builder().code(ResultCode.MODIFY_SUCCESS).build().ToRestBean() :
+                RestBeanBuilder.builder().code(ResultCode.MODIFY_FAILURE).build().ToRestBean();
+    }
+
+
 }
 

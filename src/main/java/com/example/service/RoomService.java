@@ -30,6 +30,6 @@ public interface RoomService {
      * 每隔3秒判断对手是否加入房间
      * @return 对手是否加入房间
      */
-    void waitForOpponent();
+    void waitForOpponent(HttpServletRequest request);
 
 }

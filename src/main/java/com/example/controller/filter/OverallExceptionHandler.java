@@ -86,6 +86,13 @@ public class OverallExceptionHandler {
         return RestBeanBuilder.builder().code(ResultCode.NOT_EXIST_IN_COOKIE).messageType(RestBeanBuilder.USER_DEFINED).message(e.getMessage()).build().ToRestBean();
 
     }
+    @ExceptionHandler(MyFileException.class)
+    public RestBean<Object> handleNotExistInCookieException(MyFileException e) {
+        if ("".equals(e.getMessage()))
+            return RestBeanBuilder.builder().code(ResultCode.UPLOAD_FAILURE).build().ToRestBean();
+        return RestBeanBuilder.builder().code(ResultCode.UPLOAD_FAILURE).messageType(RestBeanBuilder.USER_DEFINED).message(e.getMessage()).build().ToRestBean();
+
+    }
 
 
 }

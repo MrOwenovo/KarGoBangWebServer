@@ -83,8 +83,8 @@ public class RoomApiController {
     })
     @ApiOperation(value = "查看对手是否加入房间", notes = "每隔三秒请求一次，判断对手是否进入房间")
     @GetMapping("/waitForOpponent")
-    public RestBean<Object> waitForOpponent() {
-        roomService.waitForOpponent();
+    public RestBean<Object> waitForOpponent(HttpServletRequest request) {
+        roomService.waitForOpponent(request);
         return RestBeanBuilder.builder().code(ResultCode.OPPONENT_IS_IN).build().ToRestBean();
 
     }

@@ -58,7 +58,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/auth/access-deny","/api/auth/verify","/api/auth/register","/api/auth/logout","/api/auth/logout-success").permitAll()
                 .antMatchers("/api/**", "/api/auth/login-success").authenticated()
                 .antMatchers("/api/auth/guest/isGuest","/api/room/**").hasRole("user")
-                .antMatchers("/api/game/**").permitAll()
+                .antMatchers("/api/game/**","/api/chat/**","/api/user/**").permitAll()
                 .anyRequest().permitAll()
                 .and()
                 .formLogin()

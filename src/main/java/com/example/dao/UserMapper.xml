@@ -12,4 +12,12 @@
         </set>
         where username=#{username}
     </update>
+    <update id="modifyUserScoreDetails">
+        update userscore
+        <set>
+            <if test='wins!=0'>wins=#{wins},</if>
+            <if test='sessions!=0'>sessions=#{sessions},</if>
+        </set>
+        where username=#{username}
+    </update>
 </mapper>

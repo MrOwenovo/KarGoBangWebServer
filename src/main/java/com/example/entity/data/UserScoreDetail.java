@@ -20,4 +20,5 @@ public class UserScoreDetail implements Serializable {
     int passNumber;
     int coins;
     int user_id;
+    int sessions;
 }

@@ -40,6 +40,10 @@ public enum ResultCode {
 
     MODIFY_SUCCESS(200,"修改成功!"),
 
+    SEND_SUCCESS(200,"发送成功!"),
+
+    UPLOAD_SUCCESS(200,"上传成功!"),
+
 
 
 
@@ -75,7 +79,11 @@ public enum ResultCode {
 
     NOT_EXIST_IN_COOKIE(414,"在请求头中不存在该Cookie!"),
 
-    MODIFY_FAILURE(415,"修改失败!!");
+    MODIFY_FAILURE(415,"修改失败!!"),
+
+    SEND_FAILURE(415,"发送失败!!"),
+
+    UPLOAD_FAILURE(415,"上传失败!!");
 
 
 

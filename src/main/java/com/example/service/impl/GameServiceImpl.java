@@ -1,15 +1,20 @@
 package com.example.service.impl;
 
+import com.example.controller.exception.NotExistInMysqlException;
 import com.example.controller.exception.NotExistInRedisException;
 import com.example.controller.exception.ThreadLocalIsNullException;
+import com.example.dao.AuthMapper;
+import com.example.dao.UserMapper;
 import com.example.entity.constant.ThreadDetails;
 import com.example.entity.data.ChessDetail;
+import com.example.entity.data.UserDetail;
+import com.example.entity.data.UserScoreDetail;
 import com.example.service.GameService;
+import com.example.service.util.RedisTools;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.Map;
@@ -33,6 +38,14 @@ public class GameServiceImpl implements GameService {
 
     @Resource
     RedisTemplate<Object, Object> template;
+    @Resource
+    UserMapper userMapper;
+    @Resource
+    AuthMapper authMapper;
+    @Resource
+    RedisTools<Integer> redisTools;
+    @Resource
+    RedisTools<String> redisToolsString;
 
 
     @Transactional
@@ -40,12 +53,9 @@ public class GameServiceImpl implements GameService {
     public boolean move(int x, int y, int z,int type) {
         //从redis获取房间号
         String roomNumber = ThreadDetails.redisRoomNumber.get();
-        if (roomNumber == null) throw new ThreadLocalIsNullException("ThreadDetails中没有RoomNumber!");
         Object indexObject = null;
         //获得棋子步数
-        indexObject = template.opsForValue().get((type==WHITE?WHITE_INDEX_TOKEN_KEY:BLACK_INDEX_TOKEN_KEY) + roomNumber);
-        if(indexObject==null) throw new NotExistInRedisException("redis数据库中没有"+(type==WHITE?"白":"黑")+"棋步数数据");
-        int index = (int)indexObject;
+        int index=redisTools.getFromRedis((type == WHITE ? WHITE_INDEX_TOKEN_KEY : BLACK_INDEX_TOKEN_KEY) + roomNumber, "redis数据库中没有" + (type == WHITE ? "白" : "黑") + "棋步数数据");
 
         //将棋子行动存储到Redis中
         HashMap<String, Integer> move = new HashMap<>();
@@ -53,11 +63,9 @@ public class GameServiceImpl implements GameService {
         move.put("y", y);
         move.put("z", z);
 
-        template.opsForHash().putAll((type==WHITE?WHITE_MOVE_TOKEN_KEY:BLACK_MOVE_TOKEN_KEY)+roomNumber+":"+index,move);
-        template.expire((type==WHITE?WHITE_MOVE_TOKEN_KEY:BLACK_MOVE_TOKEN_KEY) + roomNumber + ":" + index, 3, TimeUnit.MINUTES);
+        redisTools.setHashMapToRedis((type==WHITE?WHITE_MOVE_TOKEN_KEY:BLACK_MOVE_TOKEN_KEY)+roomNumber+":"+index,move,3,RedisTools.MINUTE);
         //让棋子步数+1
-        template.opsForValue().set((type==WHITE?WHITE_INDEX_TOKEN_KEY:BLACK_INDEX_TOKEN_KEY) + roomNumber,index+1);
-        template.expire((type==WHITE?WHITE_INDEX_TOKEN_KEY:BLACK_INDEX_TOKEN_KEY) + roomNumber,3,TimeUnit.MINUTES);
+        redisTools.setToRedis((type==WHITE?WHITE_INDEX_TOKEN_KEY:BLACK_INDEX_TOKEN_KEY) + roomNumber,index+1,3,RedisTools.MINUTE);
         return true;
     }
 
@@ -66,14 +74,10 @@ public class GameServiceImpl implements GameService {
     public ChessDetail waitForWhiteMove() {
         //获取房间号
         String roomNumber = ThreadDetails.redisRoomNumber.get();
-        if (roomNumber == null) throw new ThreadLocalIsNullException("ThreadDetails中没有RoomNumber!");
         //获取黑棋步数
-        Object blackIndexObject = template.opsForValue().get(BLACK_INDEX_TOKEN_KEY + roomNumber);
-        if(blackIndexObject==null) throw new NotExistInRedisException("redis数据库中没有黑棋步数数据");
-        int blackIndex = (int) blackIndexObject;
+        int blackIndex=redisTools.getFromRedis(BLACK_INDEX_TOKEN_KEY + roomNumber, "redis数据库中没有黑棋步数数据");
         //从redis中查看是否白棋有下子的消息
-        Map<Object, Object> whiteMoveInfo = template.opsForHash().entries(WHITE_MOVE_TOKEN_KEY + roomNumber + ":" + blackIndex);
-        if (whiteMoveInfo.isEmpty()) throw new NotExistInRedisException("白棋尚未下子");
+        Map<Object, Object> whiteMoveInfo = redisTools.getHashMapFromRedis(WHITE_MOVE_TOKEN_KEY + roomNumber + ":" + blackIndex, "白棋尚未下子");
         //删除旧key
         template.delete(WHITE_MOVE_TOKEN_KEY + roomNumber + ":" + blackIndex);
         return new ChessDetail((Integer) whiteMoveInfo.get("x"),(Integer)whiteMoveInfo.get("y"),(Integer)whiteMoveInfo.get("z"));
@@ -83,14 +87,10 @@ public class GameServiceImpl implements GameService {
     public ChessDetail waitForBlackMove() {
         //获取房间号
         String roomNumber = ThreadDetails.redisRoomNumber.get();
-        if (roomNumber == null) throw new ThreadLocalIsNullException("ThreadDetails中没有RoomNumber!");
         //获取白棋步数
-        Object whiteIndexObject = template.opsForValue().get(WHITE_INDEX_TOKEN_KEY + roomNumber);
-        if(whiteIndexObject==null) throw new NotExistInRedisException("redis数据库中没有白棋步数数据");
-        int whiteIndex = (int)whiteIndexObject;
+        int whiteIndex = redisTools.getFromRedis(WHITE_INDEX_TOKEN_KEY + roomNumber, "redis数据库中没有白棋步数数据");
         //从redis中查看是否黑棋有下子的消息
-        Map<Object, Object> blackMoveInfo = template.opsForHash().entries(BLACK_MOVE_TOKEN_KEY + roomNumber + ":" + (whiteIndex-1));
-        if (blackMoveInfo.isEmpty()) throw new NotExistInRedisException("黑棋尚未下子");
+        Map<Object, Object> blackMoveInfo =redisTools.getHashMapFromRedis(BLACK_MOVE_TOKEN_KEY + roomNumber + ":" + (whiteIndex - 1), "黑棋尚未下子");
         //删除旧key
         template.delete(BLACK_MOVE_TOKEN_KEY + roomNumber + ":" + whiteIndex);
         return new ChessDetail((Integer) blackMoveInfo.get("x"),(Integer)blackMoveInfo.get("y"),(Integer)blackMoveInfo.get("z"));
@@ -100,10 +100,8 @@ public class GameServiceImpl implements GameService {
     public boolean whiteWaitForOpponent() {
         //获取房间号
         String roomNumber = ThreadDetails.redisRoomNumber.get();
-        if (roomNumber == null) throw new ThreadLocalIsNullException("ThreadDetails中没有RoomNumber!");
         //从redis中查看是否黑棋已经开始准备下子
-        Object flag = template.opsForValue().get(OPPONENT_BLACK_IN_TOKEN_KEY + roomNumber);
-        if (flag== null) throw new NotExistInRedisException("黑棋尚未准备开始游戏");
+        redisTools.getFromRedis(OPPONENT_BLACK_IN_TOKEN_KEY + roomNumber, "黑棋尚未准备开始游戏");
         //删除旧key
         template.delete(OPPONENT_BLACK_IN_TOKEN_KEY + roomNumber);
         return true;
@@ -113,26 +111,42 @@ public class GameServiceImpl implements GameService {
     public boolean blackWaitForOpponent() {
         //获取房间号
         String roomNumber = ThreadDetails.redisRoomNumber.get();
-        if (roomNumber == null) throw new ThreadLocalIsNullException("ThreadDetails中没有RoomNumber!");
         //从redis中查看是否白棋已经开始准备下子
-        Object flag = template.opsForValue().get(OPPONENT_WHITE_IN_TOKEN_KEY + roomNumber);
-        if (flag== null) throw new NotExistInRedisException("白棋尚未准备开始游戏");
+        redisTools.getFromRedis(OPPONENT_WHITE_IN_TOKEN_KEY + roomNumber,"白棋尚未准备开始游戏");
         //删除旧key
         template.delete(OPPONENT_WHITE_IN_TOKEN_KEY + roomNumber);
         return true;
     }
 
+    @Transactional
     @Override
     public boolean isIn(int type) {
         //获取房间号
         String roomNumber = ThreadDetails.redisRoomNumber.get();
-        if (roomNumber == null) throw new ThreadLocalIsNullException("ThreadDetails中没有RoomNumber!");
         //将自己已经进入房间的信息存储到Redis中
-        template.opsForValue().set((type==WHITE?OPPONENT_WHITE_IN_TOKEN_KEY:OPPONENT_BLACK_IN_TOKEN_KEY)+roomNumber,"true");
-        template.expire((type==WHITE?OPPONENT_WHITE_IN_TOKEN_KEY:OPPONENT_BLACK_IN_TOKEN_KEY) + roomNumber, 3, TimeUnit.MINUTES);
+        redisToolsString.setToRedis((type == WHITE ? OPPONENT_WHITE_IN_TOKEN_KEY : OPPONENT_BLACK_IN_TOKEN_KEY) + roomNumber, "true", 3, RedisTools.MINUTE);
         //初始化棋子步数，防止拿取时空指针异常
-        template.opsForValue().set((type==WHITE?WHITE_INDEX_TOKEN_KEY:BLACK_INDEX_TOKEN_KEY)+roomNumber,0);
-        template.expire((type==WHITE?WHITE_INDEX_TOKEN_KEY:BLACK_INDEX_TOKEN_KEY) + roomNumber, 3, TimeUnit.MINUTES);
+        redisTools.setToRedis((type==WHITE?WHITE_INDEX_TOKEN_KEY:BLACK_INDEX_TOKEN_KEY)+roomNumber,0,3,RedisTools.MINUTE);
+        return true;
+    }
+
+    @Override
+    public boolean gameResult(boolean isWin) {
+        String username = ThreadDetails.getUsername();
+        UserDetail userDetail = authMapper.findUserByUsername(username).orElseThrow(() -> new NotExistInMysqlException("不存在该用户!"));
+        UserScoreDetail userScore = userDetail.getUserScore();
+        return isWin?
+            userMapper.modifyUserScoreDetails(username, userScore.getWins() + 1, userScore.getSessions() + 1):
+            userMapper.modifyUserScoreDetails(username,0, userScore.getSessions() + 1);
+    }
+
+    @Override
+    public boolean changePassNumber(int number) {
+        String username = ThreadDetails.getUsername();
+        UserDetail userDetail = authMapper.findUserByUsername(username).orElseThrow(() -> new NotExistInMysqlException("不存在该用户!"));
+        UserScoreDetail userScore = userDetail.getUserScore();
+        if (userScore.getPassNumber()<number)
+            return userMapper.modifyPassNumber(number, username);
         return true;
     }
 }

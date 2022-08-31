@@ -1,20 +1,23 @@
 package com.example.controller;
 
 import com.example.controller.exception.NotExistInMysqlException;
-import com.example.controller.exception.ThreadLocalIsNullException;
 import com.example.dao.AuthMapper;
-import com.example.dao.UserMapper;
 import com.example.entity.constant.ThreadDetails;
 import com.example.entity.data.UserDetail;
 import com.example.entity.repo.RestBean;
 import com.example.entity.repo.RestBeanBuilder;
 import com.example.entity.repo.ResultCode;
+import com.example.service.FileService;
 import com.example.service.UserService;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.util.WebUtils;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 @Slf4j
 @Api(tags = "用户服务", description = "修改用户信息，查询用户信息等")
@@ -25,7 +28,7 @@ public class UserApiController {
     @Resource
     AuthMapper authMapper;
     @Resource
-    UserMapper userMapper;
+    FileService fileService;
     @Resource
     UserService userService;
 
@@ -80,4 +83,21 @@ public class UserApiController {
                 RestBeanBuilder.builder().code(ResultCode.MODIFY_SUCCESS).build().ToRestBean():
                 RestBeanBuilder.builder().code(ResultCode.MODIFY_FAILURE).build().ToRestBean();
     }
+
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "file", paramType = "query", required = true, dataType = "string", dataTypeClass = String.class,example = "file"),
+    })
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "上传成功"),
+            @ApiResponse(code = 400, message = "上传失败,请查看日志"),
+            @ApiResponse(code = 401, message = "没有权限")
+    })
+    @ApiOperation(value = "上传用户头像", notes = "将用户头像上传到服务器，用blob格式保存")
+    @PostMapping("/uploadIcon")
+    public RestBean<Object> uploadIcon(HttpServletRequest request, @RequestParam(value = "file") String  file) {
+        fileService.saveIcon(file);
+        return RestBeanBuilder.builder().code(ResultCode.UPLOAD_SUCCESS).build().ToRestBean();
+    }
+
+
 }

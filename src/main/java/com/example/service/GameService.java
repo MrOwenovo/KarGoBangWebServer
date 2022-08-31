@@ -4,9 +4,10 @@ import com.example.entity.data.ChessDetail;
 
 public interface GameService {
 
-    public final static int WHITE = 0;
+    int WHITE = 0;
 
-    public final static int BLACK = 1;
+    int BLACK = 1;
+
 
     /**
      * @param x x坐标
@@ -49,5 +50,19 @@ public interface GameService {
      * @return 是否加入房间
      */
     boolean isIn(int type);
+
+    /**
+     * 游戏结束后操作数据库
+     * @param isWin 是否胜利
+     * @return 操作是否成功
+     */
+    boolean gameResult(boolean isWin);
+
+    /**
+     * 如果当前熄灯关卡高，修改数据库
+     * @param number 熄灯关卡数
+     * @return 操作是否成功
+     */
+    boolean changePassNumber(int number);
 
 }
