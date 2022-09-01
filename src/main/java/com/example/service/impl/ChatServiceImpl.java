@@ -25,6 +25,8 @@ public class ChatServiceImpl implements ChatService {
     AuthMapper authMapper;
     @Resource
     RedisTools<String> redisTools;
+    @Resource
+    RedisTemplate<Object, Object> template;
 
     public final static String SEND_OPPONENT_USERNAME_MESSAGE_TOKEN_KEY = "game:room:user:send:opponent-username-message:";
 
@@ -42,7 +44,10 @@ public class ChatServiceImpl implements ChatService {
         String username = ThreadDetails.redisUsername.get();
         //获取redis中储存的对方的信息
 
-        return redisTools.getFromRedis(SEND_OPPONENT_USERNAME_MESSAGE_TOKEN_KEY + username, "对方没有发送信息!");
+        String message = redisTools.getFromRedis(SEND_OPPONENT_USERNAME_MESSAGE_TOKEN_KEY + username, "对方没有发送信息!");
+        template.delete(SEND_OPPONENT_USERNAME_MESSAGE_TOKEN_KEY + username);
+        return message;
+
 
     }
 

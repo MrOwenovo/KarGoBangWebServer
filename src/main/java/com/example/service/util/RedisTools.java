@@ -57,11 +57,11 @@ public class RedisTools<T> {
     }
     public void setToRedis(String key,String value) {
         template.opsForValue().set(key,value);
-        template.expire(key, 10, TimeUnit.MINUTES);
+        template.expire(key, 30, TimeUnit.MINUTES);
     }
     public void setHashMapToRedis(String key,HashMap<?,?> value) {
         template.opsForHash().putAll(key,value);
-        template.expire(key, 10, TimeUnit.MINUTES);
+        template.expire(key, 30, TimeUnit.MINUTES);
     }
 
     public Set<Object> getKeys() {

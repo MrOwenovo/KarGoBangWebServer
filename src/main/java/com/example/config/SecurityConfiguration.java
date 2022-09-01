@@ -54,7 +54,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/swagger**/**","/webjars/**","/v2/**","/doc.html","/pre/**","/api/game/**").permitAll()  //允许swagger放行
+                .antMatchers("/swagger**/**","/webjars/**","/v2/**","/doc.html","/pre/**","/api/game/**","/api/chat/**","/api/user/**","/error/**").permitAll()  //允许swagger放行
                 .antMatchers("/api/auth/access-deny","/api/auth/verify","/api/auth/register","/api/auth/logout","/api/auth/logout-success").permitAll()
                 .antMatchers("/api/**", "/api/auth/login-success").authenticated()
                 .antMatchers("/api/auth/guest/isGuest","/api/room/**").hasRole("user")
@@ -72,6 +72,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .logoutSuccessUrl("/api/auth/logout-success")
                 .and()
                 .rememberMe()
+                .tokenValiditySeconds(60*60*24*7)
+                .useSecureCookie(true)
+                .alwaysRemember(true)
                 .tokenRepository(tokenRepository)
                 .and()
                 .cors()

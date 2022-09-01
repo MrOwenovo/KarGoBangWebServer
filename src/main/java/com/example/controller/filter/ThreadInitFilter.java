@@ -25,8 +25,6 @@ import java.io.IOException;
 @WebFilter(urlPatterns = "/api")
 public class ThreadInitFilter implements Filter {
 
-    @Resource
-    RedisTools<String> redisTools;
 
 
     @Override
@@ -37,7 +35,6 @@ public class ThreadInitFilter implements Filter {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
-        HttpServletResponse response = (HttpServletResponse) servletResponse;
         //初始化SecurityContext
         SecurityContext securityContext = SecurityContextHolder.getContext();
         ThreadDetails.securityContext.set(securityContext);
@@ -46,31 +43,6 @@ public class ThreadInitFilter implements Filter {
         ServletContext servletContext = request.getServletContext();
         ThreadDetails.servletContext.set(servletContext);
 
-
-        //如果为创建房间后的/api接口
-        if ( request.getServletPath().startsWith("/api/room")) {
-            //把roomNumber从Session中取出
-            String roomNumber = (String) request.getSession().getAttribute("roomNumber");
-            if (roomNumber == null) throw new ThreadLocalIsNullException("ThreadDetails中没有RoomNumber!");
-
-            ThreadDetails.roomNumber.set(roomNumber);
-        }
-        //如果为进入游戏后的/api/game,/api/chat接口
-        if (request.getServletPath().startsWith("/api/game")||request.getServletPath().startsWith("/api/chat") ) {
-            //把roomNumber从redis中取出
-            String roomNumber = redisTools.getFromRedis(RoomServiceImpl.IP_ROOM_TOKEN_KEY + IpTools.getIpAddress(request), "roomNumber");
-            ThreadDetails.redisRoomNumber.set(roomNumber);
-            System.out.println("game取出: ip:"+RoomServiceImpl.IP_ROOM_TOKEN_KEY+ IpTools.getIpAddress(request)+" values:"+roomNumber);
-
-            //把自己username从redis中取出
-            String username = redisTools.getFromRedis(RoomServiceImpl.IP_USERNAME_TOKEN_KEY + IpTools.getIpAddress(request), "username");
-            ThreadDetails.redisUsername.set(username);
-
-            //把对方username从redis中取出
-            String opponentUsername = redisTools.getFromRedis(RoomServiceImpl.IP_OPPONENT_USERNAME_TOKEN_KEY + IpTools.getIpAddress(request), "opponentUsername");
-            ThreadDetails.redisOpponentUsername.set(opponentUsername);
-
-        }
         filterChain.doFilter(servletRequest,servletResponse);
 
     }
