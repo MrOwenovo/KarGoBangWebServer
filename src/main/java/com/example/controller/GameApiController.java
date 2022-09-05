@@ -163,6 +163,9 @@ public class GameApiController {
                 RestBeanBuilder.builder().code(ResultCode.MODIFY_FAILURE).build().ToRestBean();
     }
 
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "number", paramType = "query", required = true, dataType = "int", dataTypeClass = Integer.class,example = "1"),
+    })
     @ApiResponses({
             @ApiResponse(code = 200, message = "数据修改成功"),
             @ApiResponse(code = 400,message = "数据修改失败"),

@@ -28,7 +28,7 @@ public class IpTools {
         if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
             ip = request.getRemoteAddr();
         }
-        if (ThreadDetails.securityContext.get()!=null)
+        if (ThreadDetails.securityContext.get()!=null&&ThreadDetails.securityContext.get().getAuthentication()!=null&&ThreadDetails.securityContext.get().getAuthentication().getName()!=null)
         log.info("用户[{}]的真实ip为[{}]", ThreadDetails.securityContext.get().getAuthentication().getName(), ip);
         ip=ip.replace(",","").replace("127.0.0.1","").trim();
         return ip;

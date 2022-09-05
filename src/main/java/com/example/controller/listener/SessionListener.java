@@ -30,8 +30,7 @@ public class SessionListener implements HttpSessionListener, HttpSessionAttribut
         ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
         HttpServletRequest request = servletRequestAttributes.getRequest();
         sessions.put(IpTools.getIpAddress(request), session);
-        System.out.println(IpTools.getIpAddress(request));
-        System.out.println(session);
+
     }
 
     @Override

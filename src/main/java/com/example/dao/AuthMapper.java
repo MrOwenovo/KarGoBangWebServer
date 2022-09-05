@@ -10,10 +10,10 @@ import org.apache.ibatis.annotations.*;
 import java.util.Optional;
 
 @Mapper
-@CacheNamespace(implementation = RedisMybatisCache.class)
+//@CacheNamespace(implementation = RedisMybatisCache.class)
 public interface AuthMapper {
 
-    @Insert("insert into users(username, password, role) values (#{username}, #{password},#{role})")
+    @Insert("insert into users(username,password,role) values (#{username},#{password},#{role})")
     boolean registerUser(@Param("username") String username, @Param("password") String password, @Param("role") String role);
 
     @Results(id = "user-map" ,value = {

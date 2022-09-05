@@ -55,7 +55,7 @@ public class RedisTools<T> {
             template.expire(key, time, TimeUnit.SECONDS);
 
     }
-    public void setToRedis(String key,String value) {
+    public void setToRedis(String key,T value) {
         template.opsForValue().set(key,value);
         template.expire(key, 30, TimeUnit.MINUTES);
     }
@@ -64,8 +64,8 @@ public class RedisTools<T> {
         template.expire(key, 30, TimeUnit.MINUTES);
     }
 
-    public Set<Object> getKeys() {
-        return template.keys("*");
+    public Set<Object> getKeys(String pattern) {
+        return template.keys(pattern);
     }
 
     public HashMap<Object,Object> getRedisValues() {

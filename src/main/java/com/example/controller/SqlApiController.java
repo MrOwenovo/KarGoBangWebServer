@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -15,6 +16,7 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 
 @Slf4j
+@ApiIgnore
 @RestController
 @RequestMapping("/api/dao")
 public class SqlApiController {

@@ -1,5 +1,6 @@
 package com.example.controller.filter;
 
+import com.example.anno.MyFilterOrder;
 import com.example.controller.exception.ThreadLocalIsNullException;
 import com.example.entity.constant.ThreadDetails;
 import lombok.extern.slf4j.Slf4j;
@@ -12,9 +13,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 @Slf4j
-@Component
-@Order(1)
-@WebFilter(urlPatterns = {"/api/room/addRoom", "/api/room/waitForOpponent"})
 public class RoomFilter implements Filter {
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -30,6 +28,8 @@ public class RoomFilter implements Filter {
         if (roomNumber == null) throw new ThreadLocalIsNullException("Session中没有RoomNumber!");
 
         ThreadDetails.roomNumber.set(roomNumber);
+
+        filterChain.doFilter(servletRequest, servletResponse);
     }
 
     @Override

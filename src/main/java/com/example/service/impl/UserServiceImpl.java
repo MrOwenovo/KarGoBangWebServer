@@ -18,14 +18,15 @@ public class UserServiceImpl implements UserService {
     @Resource
     UserMapper userMapper;
 
-
     @Transactional
     @Override
     public boolean modifyUserDetails(String newUsername, String message, String sex) {
-        if (newUsername.equals("")||message.equals("")||sex.equals("")) throw new ModifyException("内容不能为空!");
+        if ("".equals(newUsername)||"".equals(message)||"".equals(sex)) throw new ModifyException("内容不能为空!");
         String name = ThreadDetails.getUsername();
-        boolean a = userMapper.modifyUserInfoDetails(name, message,sex);
-        if (!Objects.equals(newUsername, name)&&newUsername != null) {
+        boolean a = true;
+        if (message!=null||sex!=null)
+            a = userMapper.modifyUserInfoDetails(name, message,sex);
+        if (!Objects.equals(newUsername, name)&&newUsername!=null) {
             boolean b = userMapper.modifyUserDetails(newUsername, name);
             return a || b;
         }

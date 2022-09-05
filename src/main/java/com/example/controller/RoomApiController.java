@@ -62,7 +62,7 @@ public class RoomApiController {
 
     @ApiImplicitParams({
             @ApiImplicitParam(name = "number", paramType = "query", required = true, dataType = "string", dataTypeClass = String.class, example = "user"),
-            @ApiImplicitParam(name = "password", paramType = "query", required = true, dataType = "string", dataTypeClass = String.class, example = "123456")
+            @ApiImplicitParam(name = "password", paramType = "query", dataType = "string", dataTypeClass = String.class, example = "123456")
     })
     @ApiResponses({
             @ApiResponse(code = 200, message = "加入房间成功"),

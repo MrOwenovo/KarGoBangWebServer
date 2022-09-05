@@ -59,7 +59,7 @@ public class RedisMybatisCache implements Cache {
 
     @Override
     public Object removeObject(Object o) {
-        return template.delete(o);
+        return template.delete(MYBATIS_CACHE_KEY+o);
     }
 
     @Override

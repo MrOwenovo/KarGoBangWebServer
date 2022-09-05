@@ -34,7 +34,9 @@ public class RedisTokenRepository implements PersistentTokenRepository {
     //由于PersistentRememberMeToken没有实现序列化接口，这里用Map存放
     private PersistentRememberMeToken getToken(String series) {
         Map<Object, Object> map = tokenTemplate.opsForHash().entries(series);
-        if (map == null) return null;
+        if (map.isEmpty()) return null;
+        Object date = map.get("date");
+        if (date==null) return null;
         return new PersistentRememberMeToken(
                 (String) map.get("username"),
                 (String) map.get("series"),

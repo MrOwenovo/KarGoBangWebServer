@@ -95,4 +95,13 @@ public class OverallExceptionHandler {
     }
 
 
+    @ExceptionHandler(NotExistInServletContextException.class)
+    public RestBean<Object> handleNotExistInServletContextException(NotExistInServletContextException e) {
+        if ("".equals(e.getMessage()))
+            return RestBeanBuilder.builder().code(ResultCode.NOT_EXIST).build().ToRestBean();
+        return RestBeanBuilder.builder().code(ResultCode.NOT_EXIST).messageType(RestBeanBuilder.USER_DEFINED).message(e.getMessage()).build().ToRestBean();
+
+    }
+
+
 }

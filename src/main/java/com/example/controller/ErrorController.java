@@ -29,6 +29,13 @@ public class ErrorController {
     }
 
     @ApiIgnore
+    @RequestMapping("/throwNullPointerException")
+    public void throwNullPointerException(HttpServletRequest request) {
+        throw (NullPointerException)request.getAttribute("filter.error.NullPointerException");
+    }
+
+
+    @ApiIgnore
     @RequestMapping("/throwException")
     public void throwException(HttpServletRequest request) throws Exception {
         throw (Exception)request.getAttribute("filter.error.Exception");

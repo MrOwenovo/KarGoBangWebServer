@@ -54,11 +54,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/swagger**/**","/webjars/**","/v2/**","/doc.html","/pre/**","/api/game/**","/api/chat/**","/api/user/**","/error/**").permitAll()  //允许swagger放行
-                .antMatchers("/api/auth/access-deny","/api/auth/verify","/api/auth/register","/api/auth/logout","/api/auth/logout-success").permitAll()
+                .antMatchers("/swagger**/**", "/webjars/**", "/v2/**", "/doc.html", "/pre/**", "/api/game/**", "/api/chat/**", "/api/user/**", "/error/**","/api/hall/**").permitAll()  //允许swagger放行
+                .antMatchers("/api/auth/access-deny", "/api/auth/verify", "/api/auth/register", "/api/auth/logout", "/api/auth/logout-success").permitAll()
                 .antMatchers("/api/**", "/api/auth/login-success").authenticated()
-                .antMatchers("/api/auth/guest/isGuest","/api/room/**").hasRole("user")
-                .antMatchers("/api/game/**","/api/chat/**","/api/user/**").permitAll()
+                .antMatchers("/api/auth/guest/isGuest", "/api/room/**").hasRole("user")
+                .antMatchers("/api/game/**", "/api/chat/**", "/api/user/**","/api/hall/**").permitAll()
                 .anyRequest().permitAll()
                 .and()
                 .formLogin()
@@ -72,7 +72,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .logoutSuccessUrl("/api/auth/logout-success")
                 .and()
                 .rememberMe()
-                .tokenValiditySeconds(60*60*24*7)
+                .tokenValiditySeconds(60 * 60 * 24 * 7)
                 .useSecureCookie(true)
                 .alwaysRemember(true)
                 .tokenRepository(tokenRepository)
@@ -81,7 +81,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and()
 //                .exceptionHandling().authenticationEntryPoint(getAuthenticationEntryPoint())
 //                .and()
-                .csrf().disable();
+                .csrf().disable()
+                .sessionManagement()
+                .maximumSessions(1);
     }
 
     /**
@@ -109,7 +111,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 //        config.addAllowedHeader(Arrays.asList("*"));
         config.setAllowedHeaders(Collections.singletonList("*"));
         //放行哪些请求方式，*代表所有
-        config.setAllowedMethods(Arrays.asList("PUT", "POST", "GET", "OPTIONS", "DELETE"));
+        config.setAllowedMethods(Arrays.asList("PUT", "POST", "GET", "OPTIONS", "DELETE", "PATCH"));
         //是否允许发送Cookie,必须要开启，因为我们的JSESSIONNID需要在Cookie中携带
         config.setAllowCredentials(true);
         config.setExposedHeaders(Collections.singletonList("*"));

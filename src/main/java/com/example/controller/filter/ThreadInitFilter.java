@@ -1,5 +1,6 @@
 package com.example.controller.filter;
 
+import com.example.anno.MyFilterOrder;
 import com.example.controller.exception.ThreadLocalIsNullException;
 import com.example.entity.constant.ThreadDetails;
 import com.example.service.impl.RoomServiceImpl;
@@ -20,12 +21,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Slf4j
-@Component
-@Order
-@WebFilter(urlPatterns = "/api")
+@MyFilterOrder(value=-50)
 public class ThreadInitFilter implements Filter {
-
-
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -38,6 +35,7 @@ public class ThreadInitFilter implements Filter {
         //初始化SecurityContext
         SecurityContext securityContext = SecurityContextHolder.getContext();
         ThreadDetails.securityContext.set(securityContext);
+
 
         //初始化ServletContext
         ServletContext servletContext = request.getServletContext();

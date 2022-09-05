@@ -26,9 +26,14 @@ public class ThreadDetails {
 
     public static String getUsername() {
         //获取用户
-        String name = ThreadDetails.securityContext.get().getAuthentication().getName();
-        if (name == null) throw new ThreadLocalIsNullException("ThreadDetails中没有securityContext!");
-        return name;
+        SecurityContext securityContext = ThreadDetails.securityContext.get();
+        if (securityContext==null)
+            throw new ThreadLocalIsNullException("ThreadDetails中没有securityContext!");
+        if (securityContext.getAuthentication()==null)
+            throw new ThreadLocalIsNullException("securityContext中没有登录信息!");
+        if (securityContext.getAuthentication().getName()==null)
+            throw new ThreadLocalIsNullException("securityContext中没有登录信息!");
+        return securityContext.getAuthentication().getName();
     }
 
 

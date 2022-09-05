@@ -9,7 +9,7 @@ import org.apache.ibatis.annotations.*;
 import java.sql.Blob;
 import java.util.Optional;
 @Mapper
-@CacheNamespace(implementation = RedisMybatisCache.class)
+//@CacheNamespace(implementation = RedisMybatisCache.class)
 public interface UserMapper {
 
     @Update("update users set username=#{newUsername} where username=#{username}")
