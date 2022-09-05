@@ -5,6 +5,8 @@
 - 将前端页面部署在Nginx反向代理服务器，并转发后端请求
 - 实现联机的与后端的对接
 - springSecurity登录界面
+- 新增游戏中用户信息，发送信息等功能，新增游戏大厅
+- 将前端服务器大部分适配手机
 - 整合web3d引擎，展示三维四子棋画面，以及加载画面等 <br>
 
 ## 部署条件:
@@ -42,8 +44,14 @@
 ![web8.png](https://s2.loli.net/2022/07/01/7dyaiexk65EslnP.png)
 <p align="center">联机创建房间成功-等待对方加入</p>
 
+![0730fb6fea44c4d71e5a0406a78d77b6.png](https://img.gejiba.com/images/0730fb6fea44c4d71e5a0406a78d77b6.png)
+<p align="center">房间界面游戏大厅</p>
+
 ![wbe2.png](https://s2.loli.net/2022/07/01/bIhHDMVkUL2Z5Tw.png)
 <p align="center">三维四子棋加载界面</p>
+
+![2df0c2696a2dceddde3ab40212ec4871.png](https://img.gejiba.com/images/2df0c2696a2dceddde3ab40212ec4871.png)
+<p align="center">加载界面用户信息以及发送信息</p>
 
 ![web9.png](https://s2.loli.net/2022/07/01/8oAu592ghDTQMsx.png)
 <p align="center">三维四子棋操作提示</p>
