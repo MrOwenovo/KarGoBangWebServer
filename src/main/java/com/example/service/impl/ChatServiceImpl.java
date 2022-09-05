@@ -33,7 +33,7 @@ public class ChatServiceImpl implements ChatService {
         String opponentUsername = ThreadDetails.redisOpponentUsername.get();
 
         //将信息以对方username为key存入redis
-        redisTools.setToRedis(SEND_OPPONENT_USERNAME_MESSAGE_TOKEN_KEY + opponentUsername, opponentUsername);
+        redisTools.setToRedis(SEND_OPPONENT_USERNAME_MESSAGE_TOKEN_KEY + opponentUsername, message,15,RedisTools.SECONDS);
     }
 
     @Override
