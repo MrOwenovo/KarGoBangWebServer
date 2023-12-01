@@ -12,6 +12,6 @@ spring:
   mail:
     host: smtp.qq.com
     username: lmq122677@qq.com
-    password: rgpyxammhfsfjfgc
+    password: sobdlxhdpbnlgfdg
 constant:
   crossOriginValue: https://f01-1309918226.file.myqcloud.com

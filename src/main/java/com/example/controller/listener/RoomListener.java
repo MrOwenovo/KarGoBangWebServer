@@ -16,6 +16,7 @@ import org.springframework.web.context.ServletContextAware;
 import javax.annotation.Resource;
 import javax.servlet.ServletContext;
 import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
 @Component
@@ -31,9 +32,9 @@ public class RoomListener implements ServletContextAware {
     @EventListener
     public void createRoomListener(CreateRoomEvent event) {
         log.info("{}监听到事件源: {}", RoomListener.class.getName(), event.getSource());
-        HashMap<String, HallInfoDetail> rooms = (HashMap<String, HallInfoDetail>) servletContext.getAttribute("rooms");
+        ConcurrentHashMap<String, HallInfoDetail> rooms = (ConcurrentHashMap<String, HallInfoDetail>) servletContext.getAttribute("rooms");
         if (rooms == null) {
-            rooms = new HashMap<>();
+            rooms = new ConcurrentHashMap<>();
             servletContext.setAttribute("rooms", rooms);
         }
         String roomNumber = (String) event.getSource();
@@ -50,12 +51,13 @@ public class RoomListener implements ServletContextAware {
     @EventListener
     public void addRoomListener(AddRoomEvent event) {
         log.info("{}监听到事件源: {}", RoomListener.class.getName(), event.getSource());
-        HashMap<String, HallInfoDetail> rooms = (HashMap<String, HallInfoDetail>) servletContext.getAttribute("rooms");
+        ConcurrentHashMap<String, HallInfoDetail> rooms = (ConcurrentHashMap<String, HallInfoDetail>) servletContext.getAttribute("rooms");
         String roomNumber = (String) event.getSource();
-        //将用户信息从servletContext删除
-        rooms.remove(roomNumber);
-        log.info("{}处理{}事件成功: 删除{}", RoomListener.class.getName(),event.getSource(),roomNumber);
-
+        // 将用户信息从 servletContext 删除
+        if (rooms != null) {
+            rooms.remove(roomNumber);
+        }
+        log.info("{}处理{}事件成功: 删除{}", RoomListener.class.getName(), event.getSource(), roomNumber);
     }
 
     @Override

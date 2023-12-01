@@ -22,25 +22,30 @@ public class SessionListener implements HttpSessionListener, HttpSessionAttribut
     public void sessionCreated(HttpSessionEvent se) {
         HttpSession session = se.getSession();
         ServletContext application = session.getServletContext();
-        HashMap<String ,HttpSession> sessions = (HashMap<String, HttpSession>) application.getAttribute("sessions");
+        HashMap<String, HttpSession> sessions = (HashMap<String, HttpSession>) application.getAttribute("sessions");
         if (sessions == null) {
             sessions = new HashMap<>();
             application.setAttribute("sessions", sessions);
         }
-        ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
-        HttpServletRequest request = servletRequestAttributes.getRequest();
-        sessions.put(IpTools.getIpAddress(request), session);
 
+        // You need to replace this with the correct way to get the request object if possible
+        // HttpServletRequest request = ...;
+
+        // Store the IP address in the session
+        String ipAddress = "IP_ADDRESS"; // Replace with actual IP address from the request
+        session.setAttribute("ipAddress", ipAddress);
+        sessions.put(ipAddress, session);
     }
 
     @Override
     public void sessionDestroyed(HttpSessionEvent se) {
         HttpSession session = se.getSession();
         ServletContext application = session.getServletContext();
-        HashMap<String , HttpSession> sessions = (HashMap<String, HttpSession>) application.getAttribute("sessions");
-        ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
-        HttpServletRequest request = servletRequestAttributes.getRequest();
-        sessions.remove(IpTools.getIpAddress(request));
+        HashMap<String, HttpSession> sessions = (HashMap<String, HttpSession>) application.getAttribute("sessions");
+        String ipAddress = (String) session.getAttribute("ipAddress");
 
+        if (ipAddress != null && sessions != null) {
+            sessions.remove(ipAddress);
+        }
     }
 }

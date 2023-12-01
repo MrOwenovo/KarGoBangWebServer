@@ -16,6 +16,7 @@ import javax.servlet.ServletContext;
 import java.util.HashMap;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 @Service
@@ -29,14 +30,17 @@ public class HallServiceImpl implements HallService, ServletContextAware {
     @Resource
     AuthMapper authMapper;
 
-    @Override
     public HallInfoDetail[] getHallInfo() {
-        //从ServletContext中取出所有room
-        HashMap<String, HallInfoDetail> rooms = (HashMap<String, HallInfoDetail>)servletContext.getAttribute("rooms");
-        if (rooms==null||rooms.isEmpty())
+        // 从ServletContext中取出所有room
+        ConcurrentHashMap<String, HallInfoDetail> rooms =
+                (ConcurrentHashMap<String, HallInfoDetail>) servletContext.getAttribute("rooms");
+
+        if (rooms == null || rooms.isEmpty())
             throw new NotExistInServletContextException("当前还没有房间!");
+
         return rooms.values().toArray(new HallInfoDetail[0]);
     }
+
 
     @Override
     public void setServletContext(final ServletContext servletContext) {

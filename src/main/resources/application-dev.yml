@@ -12,7 +12,7 @@ spring:
   mail:
     host: smtp.qq.com
     username: lmq122677@qq.com
-    password: rgpyxammhfsfjfgc
+    password: sobdlxhdpbnlgfdg
 #mybatis:
 #  mapper-locations: classpath:com/example/dao/*.xml
 #  type-aliases-package: com.example.entity.data

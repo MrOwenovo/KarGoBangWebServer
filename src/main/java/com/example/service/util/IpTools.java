@@ -29,7 +29,7 @@ public class IpTools {
             ip = request.getRemoteAddr();
         }
         if (ThreadDetails.securityContext.get()!=null&&ThreadDetails.securityContext.get().getAuthentication()!=null&&ThreadDetails.securityContext.get().getAuthentication().getName()!=null)
-        log.info("用户[{}]的真实ip为[{}]", ThreadDetails.securityContext.get().getAuthentication().getName(), ip);
+//        log.info("用户[{}]的真实ip为[{}]", ThreadDetails.securityContext.get().getAuthentication().getName(), ip);
         ip=ip.replace(",","").replace("127.0.0.1","").trim();
         return ip;
 

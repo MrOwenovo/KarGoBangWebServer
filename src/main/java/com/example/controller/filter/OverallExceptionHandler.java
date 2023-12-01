@@ -5,8 +5,11 @@ import com.example.entity.repo.RestBean;
 import com.example.entity.repo.RestBeanBuilder;
 import com.example.entity.repo.ResultCode;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.catalina.connector.ClientAbortException;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -26,6 +29,15 @@ public class OverallExceptionHandler {
     }
 
 
+    @ExceptionHandler(ClientAbortException.class)
+    public RestBean<Object> handleClientAbortException(ClientAbortException e) {
+        // 这里可以记录日志或者执行其他错误处理逻辑
+        log.warn("ClientAbortException: ", e);
+
+        // 返回一个自定义的响应，或者您可以根据需要返回任何其他类型的响应
+        return RestBeanBuilder.builder().code(ResultCode.FAILURE).messageType(RestBeanBuilder.USER_DEFINED).message("连接被客户端中断").build().ToRestBean();
+
+    }
     @ExceptionHandler
     public RestBean<Object> handleException(Exception e) {
         e.printStackTrace();
