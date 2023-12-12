@@ -1,0 +1,24 @@
+version: '3.8'
+services:
+  app:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+    volumes:
+      - .:/app
+      - C:/Application/Programming/Maven/m2:/root/.m2
+    depends_on:
+      - mysql
+      - redis
+  mysql:
+    image: mysql:latest
+    environment:
+      MYSQL_DATABASE: study
+      MYSQL_USER: root
+      MYSQL_PASSWORD: lmq1226lmq
+    ports:
+      - "3306:3306"
+  redis:
+    image: redis:latest

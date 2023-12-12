@@ -6,13 +6,6 @@ job("Build") {
             """
         }
     }
-    triggers {
-        gitPush {
-            branchFilter {
-                +":refs/heads/main"
-            }
-        }
-    }
 }
 job("Test") {
     container(image = "maven:3.6.3-jdk-11") {
@@ -22,13 +15,7 @@ job("Test") {
             """
         }
     }
-    triggers {
-        gitPush {
-            branchFilter {
-                +":refs/heads/main"
-            }
-        }
-    }
+
 }
 job("Code Quality Check") {
     container(image = "sonarqube:latest") {
@@ -41,12 +28,6 @@ job("Code Quality Check") {
             """
         }
     }
-    triggers {
-        gitPush {
-            branchFilter {
-                +":refs/heads/main"
-            }
-        }
-    }
+
 }
 
