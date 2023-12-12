@@ -1,3 +1,14 @@
+job("Build Docker Image") {
+    container("docker:19.03.12") {
+        shellScript {
+            content = """
+            docker build -t my-springboot-app .
+            """
+        }
+    }
+    
+}
+
 job("Build") {
     container(image = "maven:3.6.3-jdk-11") {
         shellScript {
