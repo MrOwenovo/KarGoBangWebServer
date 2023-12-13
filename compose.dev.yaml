@@ -12,8 +12,8 @@ services:
       - .:/app
       - C:/Application/Programming/Maven/m2:/root/.m2
     depends_on:
-      - mysql
-      - redis
+      - mysql-dev
+      - redis-dev
   mysql-dev:
     image: mysql:latest
     environment:

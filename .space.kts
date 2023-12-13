@@ -1,7 +1,24 @@
+job("Qodana") {
+  startOn {
+    gitPush {
+      anyBranchMatching {
+        +"main"
+      }
+    }
+    codeReviewOpened{}
+  }
+  container("jetbrains/qodana-jvm") {
+    env["QODANA_TOKEN"] = "{{ project:eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJvcmdhbml6YXRpb24iOiJ6ODY0diIsInByb2plY3QiOiIzSjdrWSIsInRva2VuIjoiQWdlcXEifQ.4yZkBQI0BBAipawTj_8z3tsi07NiVw8OkAKSuQaPHzA }}"
+    shellScript {
+      content = "qodana"
+    }
+  }
+}
+
 job("Build and Deploy") {
     container(image = "docker") {
-        env["DOCKER_USERNAME"] = System.getenv("DOCKER_USERNAME")
-        env["DOCKER_PASSWORD"] = System.getenv("DOCKER_PASSWORD")
+        env["DOCKER_USERNAME"] = "{{ env.DOCKER_USERNAME }}"
+        env["DOCKER_PASSWORD"] = "{{ env.DOCKER_PASSWORD }}"
         shellScript {
             content = """
                 # 构建 Docker 镜像 
@@ -20,5 +37,11 @@ job("Build and Deploy") {
             """
         }
     }
-
+    startOn {
+        gitPush {
+            anyBranchMatching {
+                +"refs/heads/main"
+            }
+        }
+    }
 }

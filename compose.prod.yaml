@@ -9,8 +9,8 @@ services:
     environment:
       SPRING_PROFILES_ACTIVE: dev
     depends_on:
-      - mysql
-      - redis
+      - mysql-prod
+      - redis-prod
   mysql-prod:
     image: mysql:latest
     environment:
