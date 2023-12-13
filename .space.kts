@@ -20,11 +20,5 @@ job("Build and Deploy") {
             """
         }
     }
-    startOn {
-        gitPush {
-            anyBranchMatching {
-                +"refs/heads/main"
-            }
-        }
-    }
+
 }
