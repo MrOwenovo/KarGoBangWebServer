@@ -6,6 +6,8 @@ services:
       dockerfile: Dockerfile.dev
     ports:
         - "8080:8080"
+    networks:
+      - kargobang
     environment:
       SPRING_PROFILES_ACTIVE: dev
     volumes:
@@ -26,3 +28,6 @@ services:
       - "3306:3306"
   redis-dev:
     image: redis:latest
+networks:
+  kargobang:
+    driver: bridge
