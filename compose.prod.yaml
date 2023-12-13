@@ -1,24 +1,25 @@
 version: '3.8'
 services:
-  app:
+  app-prod:
     build:
       context: .
       dockerfile: Dockerfile
     ports:
       - "8080:8080"
     environment:
-      SPRING_PROFILES_ACTIVE: prod
+      SPRING_PROFILES_ACTIVE: dev
     depends_on:
       - mysql
       - redis
-  mysql:
+  mysql-prod:
     image: mysql:latest
     environment:
-      MYSQL_ROOT_PASSWORD: lmq1226lmq
-      MYSQL_DATABASE: study
-      MYSQL_USER: root
+      MYSQL_ROOT_PASSWORD: lmq1226lmq  # 设置 root 用户的密码
+      MYSQL_DATABASE: kargobang-prod
+      # MYSQL_USER 和 MYSQL_PASSWORD 可用于创建一个非 root 用户
+      MYSQL_USER: mrowen
       MYSQL_PASSWORD: lmq1226lmq
     ports:
       - "3306:3306"
-  redis:
+  redis-prod:
     image: redis:latest

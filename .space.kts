@@ -1,44 +1,28 @@
-job("Build Docker Image") {
-    container("docker:19.03.12") {
+job("Build and Deploy") {
+    container(image = "docker") {
         shellScript {
             content = """
-            docker build -t my-springboot-app .
+                # 构建 Docker 镜像
+                docker build -t kargobangapp:latest .
+
+                # 推送镜像到 Docker 仓库
+                # 假设您已在项目的环境变量中配置了 DOCKER_USERNAME  DOCKER_PASSWORD
+                echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
+                docker tag kargobangapp:latest mrowenovo/kargobang:latest
+                docker push mrowenovo/kargobang:latest
+
+                # 使用 docker-compose 启动生产环境容器
+                # 假设您的 compose.prod.yaml 在项目根目录
+                docker-compose -f compose.prod.yaml up -d
             """
         }
     }
-    
-}
-
-job("Build") {
-    container(image = "maven:3.6.3-jdk-8") {
-        shellScript {
-            content = """
-            mvn clean install
-            """
+    startOn {
+        gitPush {
+            // 根据需要调整分支
+            branchFilter {
+                +"refs/heads/main"
+            }
         }
     }
 }
-job("Test") {
-    container(image = "maven:3.6.3-jdk-8") {
-        shellScript {
-            content = """
-            mvn test
-            """
-        }
-    }
-
-}
-job("Code Quality Check") {
-    container(image = "sonarqube:latest") {
-        shellScript {
-            content = """
-            mvn sonar:sonar \
-                -Dsonar.projectKey=my_project_key \
-                -Dsonar.host.url=http://my_sonar_server \
-                -Dsonar.login=my_sonar_login
-            """
-        }
-    }
-
-}
-
