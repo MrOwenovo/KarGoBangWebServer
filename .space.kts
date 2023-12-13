@@ -1,19 +1,3 @@
-job("Qodana") {
-  startOn {
-    gitPush {
-      anyBranchMatching {
-        +"main"
-      }
-    }
-    codeReviewOpened{}
-  }
-  container("jetbrains/qodana-jvm") {
-    env["QODANA_TOKEN"] = "{{ project:eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJvcmdhbml6YXRpb24iOiJ6ODY0diIsInByb2plY3QiOiIzSjdrWSIsInRva2VuIjoiQWdlcXEifQ.4yZkBQI0BBAipawTj_8z3tsi07NiVw8OkAKSuQaPHzA }}"
-    shellScript {
-      content = "qodana"
-    }
-  }
-}
 
 job("Build and Deploy") {
     container(image = "docker") {
@@ -37,11 +21,5 @@ job("Build and Deploy") {
             """
         }
     }
-    startOn {
-        gitPush {
-            anyBranchMatching {
-                +"refs/heads/main"
-            }
-        }
-    }
+    
 }
