@@ -1,7 +1,7 @@
 job("Build and Deploy") {
     container(image = "docker") {
-        env["DOCKER_USERNAME"] = "{{ env.DOCKER_USERNAME }}"
-        env["DOCKER_PASSWORD"] = "{{ env.DOCKER_PASSWORD }}"
+        env["DOCKER_USERNAME"] = System.getenv("DOCKER_USERNAME")
+        env["DOCKER_PASSWORD"] = System.getenv("DOCKER_PASSWORD")
         shellScript {
             content = """
                 # 构建 Docker 镜像 
