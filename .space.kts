@@ -2,7 +2,7 @@ job("Build and Deploy") {
     container(image = "docker") {
         shellScript {
             content = """
-                # 构建 Docker 镜像
+                # 构建 Docker 镜像 
                 docker build -t kargobangapp:latest .
                 
                 // 声明 secrets
