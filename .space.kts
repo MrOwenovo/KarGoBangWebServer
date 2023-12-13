@@ -10,7 +10,7 @@ job("Build Docker Image") {
 }
 
 job("Build") {
-    container(image = "maven:3.6.3-jdk-11") {
+    container(image = "maven:3.6.3-jdk-8") {
         shellScript {
             content = """
             mvn clean install
@@ -19,7 +19,7 @@ job("Build") {
     }
 }
 job("Test") {
-    container(image = "maven:3.6.3-jdk-11") {
+    container(image = "maven:3.6.3-jdk-8") {
         shellScript {
             content = """
             mvn test

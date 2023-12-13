@@ -2,9 +2,9 @@ server:
   port: 8080
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/study
+    url: jdbc:mysql://localhost:3306/kargobang
     driver-class-name: com.mysql.cj.jdbc.Driver
-    username: root
+    username: mrowen
     password: lmq1226lmq
   mvc:
     pathmatch:

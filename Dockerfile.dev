@@ -1,0 +1,15 @@
+# 使用带有 Maven 的 Java 基础镜像
+FROM maven:3.6.3-jdk-11
+
+# 工作目录设置为 /app
+WORKDIR /app
+
+# 将项目的 pom.xml 和 src 目录复制到容器内
+COPY pom.xml .
+COPY src ./src
+
+# 暴露 8080 端口
+EXPOSE 8080
+
+# 运行应用
+CMD ["mvn", "spring-boot:run"]
