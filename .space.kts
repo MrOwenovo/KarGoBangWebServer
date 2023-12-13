@@ -1,14 +1,13 @@
 job("Build and Deploy") {
     container(image = "docker") {
+        env["DOCKER_USERNAME"] = "{{ env.DOCKER_USERNAME }}"
+        env["DOCKER_PASSWORD"] = "{{ env.DOCKER_PASSWORD }}"
         shellScript {
             content = """
                 # 构建 Docker 镜像 
                 docker build -t kargobangapp:latest .
                 
-                // 声明 secrets
-                env["DOCKER_USERNAME"] = "{{ secret:DOCKER_USERNAME }}"
-                env["DOCKER_PASSWORD"] = "{{ secret:DOCKER_PASSWORD }}"
-        
+              
                 # 推送镜像到 Docker 仓库
                 # 假设您已在项目的环境变量中配置了 DOCKER_USERNAME  DOCKER_PASSWORD
                 echo "${'$'}DOCKER_PASSWORD" | docker login -u "${'$'}DOCKER_USERNAME" --password-stdin
